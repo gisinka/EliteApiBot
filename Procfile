@@ -1,1 +1,1 @@
-worker: cd \$HOME/heroku_output && ./$EliteApiBot
+worker: cd heroku_output && ./$EliteApiBot
