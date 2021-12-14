@@ -4,12 +4,12 @@ namespace Elite_API_Discord.Infrastructure.Squad
 {
     public class SquadImporter
     {
-        public static async Task<string> GetSquadString(string tag)
+        public static async Task<IEnumerable<string>> GetSquadString(string tag)
         {
-            var squadJson = await SquadRequester.Request(tag.ToUpperInvariant(), new HttpClient());
-            var squadInfo = await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfo>>(squadJson).FirstOrDefault());
-
-            return squadInfo?.ToString() ?? "Invalid tag";
+            var squadJsons = await SquadRequester.Request(tag.ToUpperInvariant(), new HttpClient());
+            var squadInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfo>>(squadJsons));
+            
+            return squadInfos.Select(x => x.ToString());
         }
     }
 }
