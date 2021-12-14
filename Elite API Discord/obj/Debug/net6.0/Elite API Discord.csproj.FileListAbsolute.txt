@@ -1,0 +1,30 @@
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\appsettings.Development.json
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\appsettings.json
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Elite API Discord.exe
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Elite API Discord.deps.json
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Elite API Discord.runtimeconfig.json
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Elite API Discord.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\ref\Elite API Discord.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Elite API Discord.pdb
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Discord.Net.Commands.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Discord.Net.Core.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Discord.Net.Rest.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Discord.Net.Webhook.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Discord.Net.WebSocket.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\System.Interactive.Async.dll
+C:\Repos\Elite API Discord\Elite API Discord\bin\Debug\net6.0\System.Linq.Async.dll
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.csproj.AssemblyReference.cache
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.GeneratedMSBuildEditorConfig.editorconfig
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.AssemblyInfoInputs.cache
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.AssemblyInfo.cs
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.csproj.CoreCompileInputs.cache
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.MvcApplicationPartsAssemblyInfo.cache
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\staticwebassets.build.json
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\staticwebassets.development.json
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\scopedcss\bundle\Elite API Discord.styles.css
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.csproj.CopyComplete
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.dll
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\ref\Elite API Discord.dll
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.pdb
+C:\Repos\Elite API Discord\Elite API Discord\obj\Debug\net6.0\Elite API Discord.genruntimeconfig.cache
