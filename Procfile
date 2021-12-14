@@ -1,1 +1,1 @@
-worker: cd $HOME/heroku_output/EliteApiBot && dotnet run EliteApiBot
+worker: cd $HOME/heroku_output && dotnet EliteApiBot.dll
