@@ -1,0 +1,1 @@
+worker: cd /app/heroku_output && ./EliteApiBot
