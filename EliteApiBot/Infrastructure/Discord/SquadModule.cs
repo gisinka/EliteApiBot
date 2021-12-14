@@ -10,7 +10,7 @@ namespace Elite_API_Discord.Infrastructure.Discord
         public async Task SquareAsync([Summary("Squad tag")] string tag)
         {
             var content = await SquadImporter.GetSquadString(tag);
-            await Context.Channel.SendMessageAsync(content);
+            await ReplyAsync(content);
         }
     }
 }
