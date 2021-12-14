@@ -1457,19 +1457,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\gosha\\.nuget\\packages\\": {}
+    "C:\\Users\\Mi\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Repos\\Elite API Discord\\Elite API Discord\\Elite API Discord.csproj",
+      "projectUniqueName": "C:\\Users\\Mi\\source\\repos\\EliteApiBot\\Elite API Discord\\Elite API Discord.csproj",
       "projectName": "Elite API Discord",
-      "projectPath": "C:\\Repos\\Elite API Discord\\Elite API Discord\\Elite API Discord.csproj",
-      "packagesPath": "C:\\Users\\gosha\\.nuget\\packages\\",
-      "outputPath": "C:\\Repos\\Elite API Discord\\Elite API Discord\\obj\\",
+      "projectPath": "C:\\Users\\Mi\\source\\repos\\EliteApiBot\\Elite API Discord\\Elite API Discord.csproj",
+      "packagesPath": "C:\\Users\\Mi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mi\\source\\repos\\EliteApiBot\\Elite API Discord\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\gosha\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Mi\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
