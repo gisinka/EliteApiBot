@@ -1,1 +1,1 @@
-worker: cd heroku_output && ./$EliteApiBot
+worker: cd \$HOME/heroku_output &&  dotnet ./EliteApiBot.dll
