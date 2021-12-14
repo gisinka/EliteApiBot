@@ -1,1 +1,1 @@
-worker
+worker: cd $HOME/EliteApiBot/bin/Release/net6.0/linux-x64/EliteApiBot.dll && dotnet ./EliteApiBot.dll
