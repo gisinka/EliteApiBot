@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public static readonly string DateTimeFormat = "MM/dd/yyyy HH:mm:ss";
+        public const string DateTimeFormat = "dd/MM/yyyy HH:mm:ss";
     }
 }
