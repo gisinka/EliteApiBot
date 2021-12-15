@@ -2,7 +2,7 @@
 
 namespace Elite_API_Discord.Infrastructure.Squad;
 
-public class SquadInfoFull
+public class SquadInfo
 {
     [JsonProperty("Squadron name")] public string SquadronName { get; set; }
 
@@ -22,15 +22,9 @@ public class SquadInfoFull
 
     [JsonProperty("Faction name")] public string Faction { get; set; }
 
-    [JsonProperty("User tags")] public string UserTags { get; set; }
-
-    [JsonProperty("Updated UTC")] public string UpdatedDate { get; set; }
-
-    [JsonProperty("squad_id")] public long SquadId { get; set; }
-
     public override string ToString()
     {
         const char newLine = '\n';
-        return $"{nameof(SquadronName)}: {SquadronName}{newLine}{nameof(Tag)}: {Tag}{newLine}{nameof(Members)}: {Members}{newLine}{nameof(Owner)}: {Owner}{newLine}{nameof(Platform)}: {Platform}{newLine}{nameof(CreationDate)}: {CreationDate}{newLine}{nameof(Power)}: {Power}{newLine}{nameof(SuperPower)}: {SuperPower}{newLine}{nameof(Faction)}: {Faction}{newLine}{nameof(UserTags)}:{newLine}{UserTags.TrimEnd('\n')}{newLine}{nameof(UpdatedDate)}: {UpdatedDate}{newLine}{nameof(SquadId)}: {SquadId}";
+        return $"{nameof(SquadronName)}: {SquadronName}{newLine}{nameof(Tag)}: {Tag}{newLine}{nameof(Members)}: {Members}{newLine}{nameof(Owner)}: {Owner}{newLine}{nameof(Platform)}: {Platform}{newLine}{nameof(CreationDate)}: {CreationDate.ToString(Constants.DateTimeFormat)}{newLine}{nameof(Power)}: {Power}{newLine}{nameof(SuperPower)}: {SuperPower}{newLine}{nameof(Faction)}: {Faction}";
     }
 }
