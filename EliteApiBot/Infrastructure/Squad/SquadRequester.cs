@@ -1,15 +1,18 @@
-﻿using Newtonsoft.Json;
-using JsonException = System.Text.Json.JsonException;
+﻿using System.Text.Json;
 
 namespace Elite_API_Discord.Infrastructure.Squad;
 
 public class SquadRequester
 {
-    internal static async Task<string> Request(string tag, HttpClient httpClient)
+    internal static async Task<string> Request(string tag, HttpClient httpClient, bool isFull = false)
     {
-        var url = $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}?resolve_tags=true";
+        var url = isFull 
+            ? $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}?resolve_tags=true" 
+            : $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}";
         using var httpResponse = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
-        httpResponse.EnsureSuccessStatusCode();
+
+        if (!httpResponse.IsSuccessStatusCode)
+            return null;
 
         using var sr = new StreamReader(await httpResponse.Content.ReadAsStreamAsync());
 
