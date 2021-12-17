@@ -43,6 +43,8 @@ public class SquadInfo
         builder.AddField(nameof(SuperPower), SuperPower);
         builder.AddField(nameof(Faction), Faction);
 
+        builder.WithColor(0, 49, 83);
+
         return builder.Build();
     }
 }
