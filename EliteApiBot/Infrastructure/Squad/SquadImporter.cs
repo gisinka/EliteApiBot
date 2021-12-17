@@ -13,7 +13,7 @@ public class SquadImporter
         if (squadJsons == null)
             return new List<string> { "Небольшие технические шоколадки, упало апи, alert" };
 
-        var squadInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfoFull>>(squadJsons));
+        var squadInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfoFull>>(squadJsons, Constants.JsonSerializerSettings));
 
         return squadInfos.Count == 0
             ? new List<string> { "Tag does not exist" }
@@ -29,7 +29,7 @@ public class SquadImporter
         if (squadJsons == null)
             return new List<string> { "Небольшие технические шоколадки, упало апи, alert" };
 
-        var squadInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfo>>(squadJsons));
+        var squadInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfo>>(squadJsons, Constants.JsonSerializerSettings));
 
         return squadInfos.Count == 0
             ? new List<string> { "Tag does not exist" }
