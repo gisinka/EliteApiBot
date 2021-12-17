@@ -31,7 +31,7 @@ public class SquadModule : ModuleBase<SocketCommandContext>
 
         foreach (var content in contents)
         {
-            var task = new Task(() => ReplyAsync(content));
+            var task = new Task(() => ReplyAsync("", false, content));
             task.Start();
             tasks.Add(task);
         }
