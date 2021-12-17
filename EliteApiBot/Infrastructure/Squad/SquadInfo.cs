@@ -16,11 +16,11 @@ public class SquadInfo
 
     [JsonProperty("Created UTC")] public DateTime CreationDate { get; set; }
 
-    [JsonProperty("Power name")] public string Power { get; set; } = "Independent";
+    [JsonProperty("Power name")] public string Power { get; set; } = "N/D";
 
-    [JsonProperty("Super power name")] public string SuperPower { get; set; } = "Independent";
+    [JsonProperty("Super power name")] public string SuperPower { get; set; } = "N/D";
 
-    [JsonProperty("Faction name")] public string Faction { get; set; } = "None";
+    [JsonProperty("Faction name")] public string Faction { get; set; } = "N/D";
 
     public override string ToString()
     {
