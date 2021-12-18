@@ -25,12 +25,6 @@ public class SquadInfo
 
     [JsonProperty("Updated UTC")] public DateTime UpdatedDate { get; set; }
 
-    public override string ToString()
-    {
-        const char newLine = '\n';
-        return $"{nameof(SquadronName)}: {SquadronName}{newLine}{nameof(Tag)}: {Tag}{newLine}{nameof(Members)}: {Members}{newLine}{nameof(Owner)}: {Owner}{newLine}{nameof(Platform)}: {Platform}{newLine}{nameof(CreationDate)}: {CreationDate.ToString(Constants.DateTimeFormat)}{newLine}{nameof(Power)}: {Power}{newLine}{nameof(SuperPower)}: {SuperPower}{newLine}{nameof(Faction)}: {Faction}";
-    }
-
     public Embed GetEmbed()
     {
         var builder = new EmbedBuilder();
@@ -45,7 +39,7 @@ public class SquadInfo
         builder.AddField(nameof(SuperPower), SuperPower);
         builder.AddField(nameof(Faction), Faction);
 
-        builder.WithDescription("Updated: ");
+        builder.WithFooter("Updated: ");
         builder.WithTimestamp(UpdatedDate);
         builder.WithColor(0, 49, 83);
 

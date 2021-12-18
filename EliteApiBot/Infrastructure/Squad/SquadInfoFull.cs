@@ -30,12 +30,6 @@ public class SquadInfoFull
 
     [JsonProperty("squad_id")] public long SquadId { get; set; }
 
-    public override string ToString()
-    {
-        const char newLine = '\n';
-        return $"{nameof(SquadronName)}: {SquadronName}{newLine}{nameof(Tag)}: {Tag}{newLine}{nameof(Members)}: {Members}{newLine}{nameof(Owner)}: {Owner}{newLine}{nameof(Platform)}: {Platform}{newLine}{nameof(CreationDate)}: {CreationDate.ToString(Constants.DateTimeFormat)}{newLine}{nameof(Power)}: {Power}{newLine}{nameof(SuperPower)}: {SuperPower}{newLine}{nameof(Faction)}: {Faction}{newLine}{nameof(UserTags)}:{newLine}{UserTags.TrimEnd('\n')}{newLine}{nameof(UpdatedDate)}: {UpdatedDate.ToString(Constants.DateTimeFormat)}{newLine}{nameof(SquadId)}: {SquadId}";
-    }
-
     public Embed GetEmbed()
     {
         var builder = new EmbedBuilder();
@@ -50,10 +44,9 @@ public class SquadInfoFull
         builder.AddField("Super Power", SuperPower);
         builder.AddField(nameof(Faction), Faction);
         builder.AddField("User Tags", UserTags);
-        builder.AddField("Updated Date", UpdatedDate.ToString(Constants.DateTimeFormat));
         builder.AddField("Squad Id", SquadId);
 
-        builder.WithDescription("Updated: ");
+        builder.WithFooter("Updated: ");
         builder.WithTimestamp(UpdatedDate);
         builder.WithColor(0, 49, 83);
 
