@@ -1,46 +1,47 @@
 ﻿using Discord;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 
 namespace Elite_API_Discord.Infrastructure.Squad;
 
 public class SquadImporter
 {
-    public static async Task<IEnumerable<string>> GetFullSquadStrings(string tag)
+    public static async Task<IEnumerable<Embed>> GetFullSquadStrings(string tag)
     {
         if (!IsValidTag(tag))
-            return new List<string> { "Tag is invalid" };
+            return new List<Embed> { Constants.InvalidTagEmbed };
 
         var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "ISIN Squad bot instance");
 
         var squadJsons = await SquadRequester.Request(tag.ToUpperInvariant(), client, true);
+
         if (squadJsons == null)
-            return new List<string> { "Небольшие технические шоколадки, упало апи, alert" };
+            return new List<Embed> { Constants.ApiFaultEmbed };
 
         var squadInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfoFull>>(squadJsons, Constants.JsonSerializerSettings));
 
         return squadInfos.Count == 0
-            ? new List<string> { "Tag does not exist" }
-            : squadInfos.Select(x => x.ToString());
+            ? new List<Embed> { Constants.NotExistingTagEmbed }
+            : squadInfos.Select(x => x.GetEmbed());
     }
 
     public static async Task<IEnumerable<Embed>> GetSquadStrings(string tag)
     {
         if (!IsValidTag(tag))
-            return new List<Embed> { new EmbedBuilder() {Fields = new List<EmbedFieldBuilder>() { new EmbedFieldBuilder() { IsInline = false, Name = "Status", Value = "Tag is invalid"}} }.Build()};
+            return new List<Embed> { Constants.InvalidTagEmbed };
 
         var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "ISIN Squad bot instance");
 
         var squadJsons = await SquadRequester.Request(tag.ToUpperInvariant(), client);
+
         if (squadJsons == null)
-            return new List<Embed> { new EmbedBuilder() { Fields = new List<EmbedFieldBuilder>() { new EmbedFieldBuilder() { IsInline = false, Name = "Status", Value = "Небольшие технические шоколадки, упало апи, alert" } } }.Build() };
+            return new List<Embed> { Constants.ApiFaultEmbed };
 
         var squadInfos = await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfo>>(squadJsons, Constants.JsonSerializerSettings));
 
         return squadInfos.Count == 0
-            ? new List<Embed> { new EmbedBuilder() {Fields = new List<EmbedFieldBuilder>() { new EmbedFieldBuilder() { IsInline = false, Name = "Status", Value = "Tag does not exist"}} }.Build()}
+            ? new List<Embed> { Constants.NotExistingTagEmbed }
             : squadInfos.Select(x => x.GetEmbed());
     }
 

@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Discord;
 using Newtonsoft.Json;
 
 namespace Elite_API_Discord.Infrastructure.Squad;
@@ -33,5 +34,29 @@ public class SquadInfoFull
     {
         const char newLine = '\n';
         return $"{nameof(SquadronName)}: {SquadronName}{newLine}{nameof(Tag)}: {Tag}{newLine}{nameof(Members)}: {Members}{newLine}{nameof(Owner)}: {Owner}{newLine}{nameof(Platform)}: {Platform}{newLine}{nameof(CreationDate)}: {CreationDate.ToString(Constants.DateTimeFormat)}{newLine}{nameof(Power)}: {Power}{newLine}{nameof(SuperPower)}: {SuperPower}{newLine}{nameof(Faction)}: {Faction}{newLine}{nameof(UserTags)}:{newLine}{UserTags.TrimEnd('\n')}{newLine}{nameof(UpdatedDate)}: {UpdatedDate.ToString(Constants.DateTimeFormat)}{newLine}{nameof(SquadId)}: {SquadId}";
+    }
+
+    public Embed GetEmbed()
+    {
+        var builder = new EmbedBuilder();
+
+        builder.WithTitle($"{SquadronName.ToUpper()} squadron info");
+        builder.AddField(nameof(Tag), Tag);
+        builder.AddField(nameof(Members), Members);
+        builder.AddField(nameof(Owner), Owner);
+        builder.AddField(nameof(Platform), Platform);
+        builder.AddField("Creation Date", CreationDate.ToString(Constants.DateTimeFormat));
+        builder.AddField(nameof(Power), Power);
+        builder.AddField("Super Power", SuperPower);
+        builder.AddField(nameof(Faction), Faction);
+        builder.AddField("User Tags", UserTags);
+        builder.AddField("Updated Date", UpdatedDate.ToString(Constants.DateTimeFormat));
+        builder.AddField("Squad Id", SquadId);
+
+        builder.WithDescription("Updated: ");
+        builder.WithTimestamp(UpdatedDate);
+        builder.WithColor(0, 49, 83);
+
+        return builder.Build();
     }
 }

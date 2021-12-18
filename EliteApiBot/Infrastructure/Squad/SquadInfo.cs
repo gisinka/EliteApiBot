@@ -23,6 +23,8 @@ public class SquadInfo
 
     [JsonProperty("Faction name")] public string Faction { get; set; } = "N/D";
 
+    [JsonProperty("Updated UTC")] public DateTime UpdatedDate { get; set; }
+
     public override string ToString()
     {
         const char newLine = '\n';
@@ -43,6 +45,8 @@ public class SquadInfo
         builder.AddField(nameof(SuperPower), SuperPower);
         builder.AddField(nameof(Faction), Faction);
 
+        builder.WithDescription("Updated: ");
+        builder.WithTimestamp(UpdatedDate);
         builder.WithColor(0, 49, 83);
 
         return builder.Build();
