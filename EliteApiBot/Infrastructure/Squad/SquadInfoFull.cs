@@ -46,8 +46,7 @@ public class SquadInfoFull
         builder.AddField("User Tags", UserTags);
         builder.AddField("Squad Id", SquadId);
 
-        builder.WithFooter("Updated: ");
-        builder.WithTimestamp(UpdatedDate);
+        builder.WithFooter($"Updated: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
         builder.WithColor(0, 49, 83);
 
         return builder.Build();

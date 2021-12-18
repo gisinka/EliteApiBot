@@ -39,8 +39,7 @@ public class SquadInfo
         builder.AddField(nameof(SuperPower), SuperPower);
         builder.AddField(nameof(Faction), Faction);
 
-        builder.WithFooter("Updated: ");
-        builder.WithTimestamp(UpdatedDate);
+        builder.WithFooter($"Updated: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
         builder.WithColor(0, 49, 83);
 
         return builder.Build();
