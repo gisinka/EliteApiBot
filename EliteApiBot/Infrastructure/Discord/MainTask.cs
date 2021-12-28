@@ -40,7 +40,19 @@ internal class MainTask
             Assembly.GetEntryAssembly(),
             services);
 
-        client.MessageReceived += HandleCommandAsync;
+        client.MessageReceived += TryCatchHandleCommandAsync;
+    }
+
+    private async Task TryCatchHandleCommandAsync(SocketMessage messageParam)
+    {
+        try
+        {
+            await HandleCommandAsync(messageParam);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
     }
 
     private async Task HandleCommandAsync(SocketMessage messageParam)

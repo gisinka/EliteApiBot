@@ -5,17 +5,17 @@ namespace Elite_API_Discord.Infrastructure.Squad;
 
 public class SquadInfo
 {
-    [JsonProperty("Squadron name")] public string SquadronName { get; set; }
+    [JsonProperty("Squadron name")] public string SquadronName { get; set; } = "N/D";
 
-    [JsonProperty("Tag")] public string Tag { get; set; }
+    [JsonProperty("Tag")] public string Tag { get; set; } = "N/D";
 
     [JsonProperty("Members")] public short Members { get; set; }
 
-    [JsonProperty("Owner")] public string Owner { get; set; }
+    [JsonProperty("Owner")] public string Owner { get; set; } = "N/D";
 
-    [JsonProperty("Platform")] public string Platform { get; set; }
+    [JsonProperty("Platform")] public string Platform { get; set; } = "N/D";
 
-    [JsonProperty("Created UTC")] public DateTime CreationDate { get; set; }
+    [JsonProperty("Created UTC")] public DateTime CreationDate { get; set; } = DateTime.Now;
 
     [JsonProperty("Power name")] public string Power { get; set; } = "N/D";
 
@@ -23,9 +23,29 @@ public class SquadInfo
 
     [JsonProperty("Faction name")] public string Faction { get; set; } = "N/D";
 
-    [JsonProperty("Updated UTC")] public DateTime UpdatedDate { get; set; }
+    [JsonProperty("Updated UTC")] public DateTime UpdatedDate { get; set; } = DateTime.Now;
 
     public Embed GetEmbed()
+    {
+        var builder = new EmbedBuilder();
+
+        builder.WithTitle($"Информация о эскадрилье {SquadronName.ToUpper()}");
+        builder.AddField("Тег эскадры", Tag);
+        builder.AddField("Количество членов", Members);
+        builder.AddField("Владелец", Owner);
+        builder.AddField("Платформа", Platform);
+        builder.AddField("Дата создания", CreationDate.ToString(Constants.DateTimeFormat));
+        builder.AddField("Галактическая держава", Power);
+        builder.AddField("Сверхдержава", SuperPower);
+        builder.AddField("Игровая фракция", Faction);
+
+        builder.WithFooter($"Обновлено: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
+        builder.WithColor(0, 49, 83);
+
+        return builder.Build();
+    }
+
+    public Embed GetEmbedEn()
     {
         var builder = new EmbedBuilder();
 
