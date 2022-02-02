@@ -24,13 +24,14 @@ public class SquadInfo
     [JsonProperty("Faction name")] public string Faction { get; set; } = "N/D";
 
     [JsonProperty("Updated UTC")] public DateTime UpdatedDate { get; set; } = DateTime.Now;
+    [JsonProperty("motd")] public string Motd { get; set; } = "N/D";
 
     public Embed GetEmbed()
     {
         var builder = new EmbedBuilder();
 
         builder.WithTitle($"Информация о эскадрилье {SquadronName.ToUpper()}");
-        builder.AddField("Тег эскадры", Tag);
+        builder.AddField("Тег эскадры", $"[{Tag}]({string.Format(Constants.ShortLink, Tag)})");
         builder.AddField("Количество членов", Members);
         builder.AddField("Владелец", Owner);
         builder.AddField("Платформа", Platform);
@@ -38,6 +39,7 @@ public class SquadInfo
         builder.AddField("Галактическая держава", Power);
         builder.AddField("Сверхдержава", SuperPower);
         builder.AddField("Игровая фракция", Faction);
+        builder.AddField("Девиз", Motd);
 
         builder.WithFooter($"Обновлено: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
         builder.WithColor(0, 49, 83);
@@ -50,7 +52,7 @@ public class SquadInfo
         var builder = new EmbedBuilder();
 
         builder.WithTitle($"{SquadronName.ToUpper()} squadron info");
-        builder.AddField(nameof(Tag), Tag);
+        builder.AddField(nameof(Tag), $"[{Tag}]({string.Format(Constants.ShortLink, Tag)})");
         builder.AddField(nameof(Members), Members);
         builder.AddField(nameof(Owner), Owner);
         builder.AddField(nameof(Platform), Platform);
@@ -58,6 +60,7 @@ public class SquadInfo
         builder.AddField(nameof(Power), Power);
         builder.AddField(nameof(SuperPower), SuperPower);
         builder.AddField(nameof(Faction), Faction);
+        builder.AddField(nameof(Motd), Motd);
 
         builder.WithFooter($"Updated: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
         builder.WithColor(0, 49, 83);

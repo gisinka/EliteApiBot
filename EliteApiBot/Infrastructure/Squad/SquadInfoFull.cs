@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Discord;
+﻿using Discord;
 using Newtonsoft.Json;
 
 namespace Elite_API_Discord.Infrastructure.Squad;
@@ -35,7 +34,7 @@ public class SquadInfoFull
         var builder = new EmbedBuilder();
 
         builder.WithTitle($"Информация о эскадрилье {SquadronName.ToUpper()}");
-        builder.AddField("Тег эскадры", Tag);
+        builder.AddField("Тег эскадры", $"[{Tag}]({string.Format(Constants.ExtendedLink, Tag)})");
         builder.AddField("Количество членов", Members);
         builder.AddField("Владелец", Owner);
         builder.AddField("Платформа", Platform);
@@ -57,7 +56,7 @@ public class SquadInfoFull
         var builder = new EmbedBuilder();
 
         builder.WithTitle($"{SquadronName.ToUpper()} squadron info");
-        builder.AddField(nameof(Tag), Tag);
+        builder.AddField(nameof(Tag), $"[{Tag}]({string.Format(Constants.ExtendedLink, Tag)})");
         builder.AddField(nameof(Members), Members);
         builder.AddField(nameof(Owner), Owner);
         builder.AddField(nameof(Platform), Platform);

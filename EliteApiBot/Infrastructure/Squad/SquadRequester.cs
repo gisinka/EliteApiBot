@@ -8,7 +8,7 @@ public class SquadRequester
     {
         var url = isFull 
             ? $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}?resolve_tags=true" 
-            : $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}";
+            : $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}?motd=true";
         using var httpResponse = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
 
         if (!httpResponse.IsSuccessStatusCode)
