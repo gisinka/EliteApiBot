@@ -7,7 +7,7 @@ public class SquadRequester
     internal static async Task<string> Request(string tag, HttpClient httpClient, bool isFull = false)
     {
         var url = isFull 
-            ? $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}?resolve_tags=true" 
+            ? $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}?resolve_tags=true&motd=true" 
             : $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}?motd=true";
         using var httpResponse = await httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
 

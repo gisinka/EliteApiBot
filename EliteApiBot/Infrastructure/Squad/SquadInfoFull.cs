@@ -29,6 +29,8 @@ public class SquadInfoFull
 
     [JsonProperty("squad_id")] public long SquadId { get; set; } = long.MinValue;
 
+    [JsonProperty("motd")] public string Motd { get; set; } = "N/D";
+
     public Embed GetEmbed()
     {
         var builder = new EmbedBuilder();
@@ -43,6 +45,7 @@ public class SquadInfoFull
         builder.AddField("Сверхдержава", SuperPower);
         builder.AddField("Игровая фракция", Faction);
         builder.AddField("Пользовательские теги", UserTags);
+        builder.AddField("Девиз", Motd);
         builder.AddField("Id эскадрильи", SquadId);
 
         builder.WithFooter($"Обновлено: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
@@ -65,6 +68,7 @@ public class SquadInfoFull
         builder.AddField("Super Power", SuperPower);
         builder.AddField(nameof(Faction), Faction);
         builder.AddField("User Tags", UserTags);
+        builder.AddField(nameof(Motd), Motd);
         builder.AddField("Squad Id", SquadId);
 
         builder.WithFooter($"Updated: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
