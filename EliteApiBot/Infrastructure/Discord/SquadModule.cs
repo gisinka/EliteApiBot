@@ -10,16 +10,8 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     public async Task GetFullSquadStringAsync([Summary("Squad tag")] string tag)
     {
         var contents = await SquadImporter.GetFullSquadStrings(tag);
-        var tasks = new List<Task>();
 
-        foreach (var content in contents)
-        {
-            var task = new Task(() => ReplyAsync("", false, content));
-            task.Start();
-            tasks.Add(task);
-        }
-
-        Task.WaitAll(tasks.ToArray());
+        await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
     }
 
     [Command("squad")]
@@ -27,15 +19,7 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     public async Task GetSquadStringsAsync([Summary("Squad tag")] string tag)
     {
         var contents = await SquadImporter.GetSquadStrings(tag);
-        var tasks = new List<Task>();
 
-        foreach (var content in contents)
-        {
-            var task = new Task(() => ReplyAsync("", false, content));
-            task.Start();
-            tasks.Add(task);
-        }
-
-        Task.WaitAll(tasks.ToArray());
+        await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
     }
 }
