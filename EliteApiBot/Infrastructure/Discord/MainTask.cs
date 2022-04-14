@@ -17,7 +17,11 @@ internal class MainTask
         commands = new CommandService(new CommandServiceConfig { LogLevel = LogSeverity.Info, CaseSensitiveCommands = false });
         client.Log += Log;
         commands.Log += Log;
-        services = new Initialize(commands, client).BuildServiceProvider();
+
+        services = new ServiceCollection()
+            .AddSingleton(client)
+            .AddSingleton(commands)
+            .BuildServiceProvider();
     }
 
     public async Task MainAsync(string token)
@@ -36,41 +40,29 @@ internal class MainTask
 
     private async Task InitializeAsync()
     {
-        await commands.AddModulesAsync(
-            Assembly.GetEntryAssembly(),
-            services);
+        await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
 
-        client.MessageReceived += TryCatchHandleCommandAsync;
+        client.MessageReceived += HandleCommand;
     }
 
-    private async Task TryCatchHandleCommandAsync(SocketMessage messageParam)
+    private Task HandleCommand(SocketMessage messageParam)
     {
-        try
+        Task.Run(async () =>
         {
-            await HandleCommandAsync(messageParam);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-    }
+            if (messageParam is not SocketUserMessage message) return;
 
-    private async Task HandleCommandAsync(SocketMessage messageParam)
-    {
-        if (messageParam is not SocketUserMessage message) return;
+            var argPos = 0;
 
-        var argPos = 0;
+            if (!(message.HasCharPrefix('!', ref argPos) ||
+                  message.HasMentionPrefix(client.CurrentUser, ref argPos)) ||
+                message.Author.IsBot)
+                return;
 
-        if (!(message.HasCharPrefix('!', ref argPos) ||
-              message.HasMentionPrefix(client.CurrentUser, ref argPos)) ||
-            message.Author.IsBot)
-            return;
+            var context = new SocketCommandContext(client, message);
 
-        var context = new SocketCommandContext(client, message);
+            await commands.ExecuteAsync(context, argPos, null);
+        });
 
-        await commands.ExecuteAsync(
-            context,
-            argPos,
-            null);
+        return Task.CompletedTask;
     }
 }

@@ -4,7 +4,7 @@ namespace Elite_API_Discord.Infrastructure.Squad;
 
 public class SquadRequester
 {
-    internal static async Task<string> Request(string tag, HttpClient httpClient, bool isFull = false)
+    internal static async Task<string?> Request(string tag, HttpClient httpClient, bool isFull = false)
     {
         var url = isFull 
             ? $"https://sapi.demb.design/api/squads/now/by-tag/extended/{tag}?resolve_tags=true&motd=true" 
