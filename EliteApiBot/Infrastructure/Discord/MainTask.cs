@@ -2,6 +2,7 @@
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using IResult = Discord.Commands.IResult;
 
 namespace Elite_API_Discord.Infrastructure.Discord;
 
@@ -43,6 +44,7 @@ internal class MainTask
         await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
 
         client.MessageReceived += HandleCommand;
+        commands.CommandExecuted += CommandExecutedLog;
     }
 
     private Task HandleCommand(SocketMessage messageParam)
@@ -61,6 +63,33 @@ internal class MainTask
             var context = new SocketCommandContext(client, message);
 
             await commands.ExecuteAsync(context, argPos, null);
+        });
+
+        return Task.CompletedTask;
+    }
+
+    private static Task CommandExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
+    {
+        Task.Run(() =>
+        {
+            LogMessage logMessage;
+
+            if (!command.IsSpecified)
+            {
+                logMessage = new LogMessage(LogSeverity.Error, "Command", $"Command failed to execute for [{context.User.Username}] <-> [{result.ErrorReason}]!");
+                Console.WriteLine(logMessage.ToString());
+                return;
+            }
+
+            if (result.IsSuccess)
+            {
+                logMessage = new LogMessage(LogSeverity.Info, "Command", $"Command [{command.Value.Name}] executed for [{context.User.Username}] on [{context.Guild.Name}]");
+                Console.WriteLine(logMessage.ToString());
+                return;
+            }
+
+            logMessage = new LogMessage(LogSeverity.Error, "Command", $"Sorry, {context.User.Username}... something went wrong -> [{result}]!");
+            Console.WriteLine(logMessage.ToString());
         });
 
         return Task.CompletedTask;
