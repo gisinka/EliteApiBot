@@ -6,8 +6,8 @@ namespace Elite_API_Discord.Infrastructure;
 public static class Constants
 {
     public const string DateTimeFormat = "dd/MM/yyyy HH:mm:ss";
-    public const string ShortLink = "https://sapi.demb.design/squads/now/by-tag/short/{0}";
-    public const string ExtendedLink = "https://sapi.demb.design/squads/now/by-tag/extended/{0}?resolve_tags=true&motd=true";
+    public const string ShortLink = "https://sapi.demb.design/squads/now/by-tag/short/{0}?pretty_keys=true";
+    public const string ExtendedLink = "https://sapi.demb.design/squads/now/by-tag/extended/{0}?resolve_tags=true";
 
     public static readonly JsonSerializerSettings JsonSerializerSettings = new()
     {
