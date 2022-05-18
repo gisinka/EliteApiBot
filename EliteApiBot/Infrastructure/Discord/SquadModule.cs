@@ -1,4 +1,5 @@
 ﻿using Discord.Commands;
+using Elite_API_Discord.Infrastructure.Player;
 using Elite_API_Discord.Infrastructure.Squad;
 
 namespace Elite_API_Discord.Infrastructure.Discord;
@@ -21,5 +22,14 @@ public class SquadModule : ModuleBase<SocketCommandContext>
         var contents = await SquadImporter.GetSquadStrings(tag);
 
         await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
+    }
+
+    [Command("carebear")]
+    [Summary("Printing carebear info by name")]
+    public async Task GetPlayerStringAsync([Summary("Player name")] [Remainder] string name)
+    {
+        var content = await PlayerImporter.GetNameStringsAsync(name);
+
+        await ReplyAsync("", false, content);
     }
 }
