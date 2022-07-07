@@ -11,6 +11,7 @@ public class PlayerImporter
     public static async Task<Embed> GetNameStringsAsync(string name)
     {
         var req = (HttpWebRequest)WebRequest.Create(Constants.CsvLink);
+        req.Host = "gitea.demb.design";
         var resp = (HttpWebResponse)await req.GetResponseAsync();
         var sr = new StreamReader(resp.GetResponseStream());
         var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
