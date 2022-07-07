@@ -12,7 +12,6 @@ public class SquadImporter
 
         var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "ISIN Squad bot instance");
-
         var squadJsons = await SquadRequester.Request(tag.ToUpperInvariant(), client, true);
 
         if (squadJsons == null)
@@ -32,7 +31,6 @@ public class SquadImporter
 
         var client = new HttpClient();
         client.DefaultRequestHeaders.Add("User-Agent", "ISIN Squad bot instance");
-
         var squadJsons = await SquadRequester.Request(tag.ToUpperInvariant(), client);
 
         if (squadJsons == null)
