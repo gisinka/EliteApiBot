@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Elite_API_Discord.Model;
 using Elite_API_Discord.Utils;
 using Newtonsoft.Json;
 

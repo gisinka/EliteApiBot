@@ -1,6 +1,6 @@
 ﻿using Discord;
 
-namespace Elite_API_Discord.Infrastructure.Squad
+namespace Elite_API_Discord.Model
 {
     public interface ISquadInfo
     {
