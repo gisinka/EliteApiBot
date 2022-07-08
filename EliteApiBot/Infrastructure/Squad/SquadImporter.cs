@@ -6,7 +6,7 @@ namespace Elite_API_Discord.Infrastructure.Squad;
 
 public class SquadImporter
 {
-    public static async Task<IEnumerable<Embed>> GetSquadStrings(string tag, bool isFull = false)
+    public static async Task<IEnumerable<Embed>> GetSquadStrings(string tag, bool isFull = false, bool isRussian = true)
     {
         if (!IsValidTag(tag))
             return new List<Embed> { EmbedFactory.InvalidTagEmbed };
@@ -23,7 +23,7 @@ public class SquadImporter
             : await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfo>>(squadJsons, Constants.JsonSerializerSettings));
 
         return squadInfos.Any()
-            ? squadInfos.Select(x => x.BuildEmbed())
+            ? squadInfos.Select(x => x.BuildEmbed(isRussian))
             : new List<Embed> { EmbedFactory.NotExistingTagEmbed };
     }
 
