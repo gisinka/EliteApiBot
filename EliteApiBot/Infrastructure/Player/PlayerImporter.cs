@@ -12,7 +12,7 @@ public class PlayerImporter
     {
         var req = (HttpWebRequest)WebRequest.Create(Constants.CsvLink);
         req.Host = "gitea.demb.design";
-        var resp = (HttpWebResponse)await req.GetResponseAsync();
+        var resp = (HttpWebResponse) await req.GetResponseAsync();
         var sr = new StreamReader(resp.GetResponseStream());
         var configuration = new CsvConfiguration(CultureInfo.InvariantCulture)
         {

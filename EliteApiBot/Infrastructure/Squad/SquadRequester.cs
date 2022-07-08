@@ -18,7 +18,7 @@ public class SquadRequester
 
         using var sr = new StreamReader(await httpResponse.Content.ReadAsStreamAsync());
 
-        if (httpResponse.Content is not object || httpResponse.Content.Headers.ContentType.MediaType != "application/json")
+        if (httpResponse.Content.Headers.ContentType?.MediaType != "application/json")
             return null;
 
         try

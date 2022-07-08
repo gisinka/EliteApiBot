@@ -10,7 +10,7 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     [Summary("Printing full squad info by tag")]
     public async Task GetFullSquadStringAsync([Summary("Squad tag")] string tag)
     {
-        var contents = await SquadImporter.GetFullSquadStrings(tag);
+        var contents = await SquadImporter.GetSquadStrings(tag, true);
 
         await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
     }
@@ -24,7 +24,7 @@ public class SquadModule : ModuleBase<SocketCommandContext>
         await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
     }
 
-    [Command("carebear")]
+    [Command("cb")]
     [Summary("Printing carebear info by name")]
     public async Task GetPlayerStringAsync([Summary("Player name")] [Remainder] string name)
     {

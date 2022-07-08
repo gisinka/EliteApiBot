@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Elite_API_Discord.Infrastructure.Squad;
 
-public class SquadInfo
+public class SquadInfo : ISquadInfo
 {
     [JsonProperty("Squadron name")] public string SquadronName { get; set; } = "N/D";
 
