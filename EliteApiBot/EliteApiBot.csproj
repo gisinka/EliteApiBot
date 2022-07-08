@@ -16,8 +16,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="27.2.1" />
-    <PackageReference Include="Discord.Net" Version="2.4.0" />
+    <PackageReference Include="CsvHelper" Version="28.0.0" />
+    <PackageReference Include="Discord.Net" Version="3.7.2" />
   </ItemGroup>
 
 </Project>

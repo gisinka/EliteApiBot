@@ -1,33 +1,24 @@
-﻿using System.Reflection;
-using Discord;
+﻿using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using IResult = Discord.Commands.IResult;
 
 namespace Elite_API_Discord.Infrastructure.Discord;
 
-internal class MainTask
+internal class CommandHandler
 {
     private readonly DiscordSocketClient client;
-    private readonly CommandService commands;
-    private readonly IServiceProvider services;
+    private readonly CommandService commandsService;
 
-    public MainTask()
+    public CommandHandler(CommandService commandsService, DiscordSocketClient client)
     {
-        client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Info });
-        commands = new CommandService(new CommandServiceConfig { LogLevel = LogSeverity.Info, CaseSensitiveCommands = false });
-        client.Log += Log;
-        commands.Log += Log;
-
-        services = new ServiceCollection()
-            .AddSingleton(client)
-            .AddSingleton(commands)
-            .BuildServiceProvider();
+        this.commandsService = commandsService;
+        this.client = client;
     }
 
-    public async Task MainAsync(string token)
+    public async Task RunAsync(string token)
     {
-        await InitializeAsync();
+        InitializeAsync();
         await client.LoginAsync(TokenType.Bot, token);
         await client.StartAsync();
         await Task.Delay(Timeout.Infinite);
@@ -39,12 +30,12 @@ internal class MainTask
         return Task.CompletedTask;
     }
 
-    private async Task InitializeAsync()
+    private void InitializeAsync()
     {
-        await commands.AddModulesAsync(Assembly.GetEntryAssembly(), services);
-
+        client.Log += Log;
+        commandsService.Log += Log;
         client.MessageReceived += HandleCommand;
-        commands.CommandExecuted += CommandExecutedLog;
+        commandsService.CommandExecuted += CommandServiceExecutedLog;
     }
 
     private Task HandleCommand(SocketMessage messageParam)
@@ -62,13 +53,13 @@ internal class MainTask
 
             var context = new SocketCommandContext(client, message);
 
-            await commands.ExecuteAsync(context, argPos, null);
+            await commandsService.ExecuteAsync(context, argPos, null);
         });
 
         return Task.CompletedTask;
     }
 
-    private static Task CommandExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
+    private static Task CommandServiceExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
     {
         Task.Run(() =>
         {
