@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using CsvHelper.Configuration;
-using Discord;
 using Newtonsoft.Json;
 
 namespace Elite_API_Discord.Utils;

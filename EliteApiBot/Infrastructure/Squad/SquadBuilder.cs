@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 
 namespace Elite_API_Discord.Infrastructure.Squad;
 
-public class SquadImporter
+public class SquadBuilder
 {
-    public static async Task<IEnumerable<Embed>> GetSquadStrings(string tag, bool isFull = false, bool isRussian = true)
+    public static async Task<IEnumerable<Embed>> GetSquadsEmbeds(string tag, bool isFull = false, bool isRussian = true)
     {
         if (!IsValidTag(tag))
             return new List<Embed> { EmbedFactory.InvalidTagEmbed };

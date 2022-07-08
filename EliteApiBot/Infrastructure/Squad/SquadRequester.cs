@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-namespace Elite_API_Discord.Infrastructure.Squad;
+﻿namespace Elite_API_Discord.Infrastructure.Squad;
 
 public class SquadRequester
 {
@@ -21,13 +19,6 @@ public class SquadRequester
         if (httpResponse.Content.Headers.ContentType?.MediaType != "application/json")
             return null;
 
-        try
-        {
-            return await sr.ReadToEndAsync();
-        }
-        catch (JsonException)
-        {
-            return null;
-        }
+        return await sr.ReadToEndAsync();
     }
 }
