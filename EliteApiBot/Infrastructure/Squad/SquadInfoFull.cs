@@ -1,4 +1,5 @@
 ﻿using Discord;
+using Elite_API_Discord.Utils;
 using Newtonsoft.Json;
 
 namespace Elite_API_Discord.Infrastructure.Squad;
@@ -31,49 +32,40 @@ public class SquadInfoFull : ISquadInfo
 
     [JsonProperty("motd")] public string Motd { get; set; } = "N/D";
 
-    public Embed GetEmbed()
+    public Embed BuildEmbed(bool isRussian = true)
     {
-        var builder = new EmbedBuilder();
-
-        builder.WithTitle($"Информация о эскадрилье {SquadronName.ToUpper()}");
-        builder.AddField("Тег эскадры", $"[{Tag}]({string.Format(Constants.ExtendedLink, Tag)})");
-        builder.AddField("Количество членов", Members);
-        builder.AddField("Владелец", Owner);
-        builder.AddField("Платформа", Platform);
-        builder.AddField("Дата создания", CreationDate.ToString(Constants.DateTimeFormat));
-        builder.AddField("Галактическая держава", Power);
-        builder.AddField("Сверхдержава", SuperPower);
-        builder.AddField("Игровая фракция", Faction);
-        builder.AddField("Пользовательские теги", UserTags);
-        builder.AddField("Девиз", Motd);
-        builder.AddField("Id эскадрильи", SquadId);
-
-        builder.WithFooter($"Обновлено: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
-        builder.WithColor(0, 49, 83);
-
-        return builder.Build();
-    }
-
-    public Embed GetEmbedEn()
-    {
-        var builder = new EmbedBuilder();
-
-        builder.WithTitle($"{SquadronName.ToUpper()} squadron info");
-        builder.AddField(nameof(Tag), $"[{Tag}]({string.Format(Constants.ExtendedLink, Tag)})");
-        builder.AddField(nameof(Members), Members);
-        builder.AddField(nameof(Owner), Owner);
-        builder.AddField(nameof(Platform), Platform);
-        builder.AddField("Creation Date", CreationDate.ToString(Constants.DateTimeFormat));
-        builder.AddField(nameof(Power), Power);
-        builder.AddField("Super Power", SuperPower);
-        builder.AddField(nameof(Faction), Faction);
-        builder.AddField("User Tags", UserTags);
-        builder.AddField(nameof(Motd), Motd);
-        builder.AddField("Squad Id", SquadId);
-
-        builder.WithFooter($"Updated: {UpdatedDate.ToString(Constants.DateTimeFormat)}");
-        builder.WithColor(0, 49, 83);
-
-        return builder.Build();
+        return isRussian
+            ? new EmbedBuilder()
+                .WithTitle($"Информация о эскадрилье {SquadronName.ToUpper()}")
+                .AddField("Тег эскадры", $"[{Tag}]({string.Format(Constants.ExtendedLink, Tag)})")
+                .AddField("Количество членов", Members)
+                .AddField("Владелец", Owner)
+                .AddField("Платформа", Platform)
+                .AddField("Дата создания", CreationDate.ToString(Constants.DateTimeFormat))
+                .AddField("Галактическая держава", Power)
+                .AddField("Сверхдержава", SuperPower)
+                .AddField("Игровая фракция", Faction)
+                .AddField("Пользовательские теги", UserTags)
+                .AddField("Девиз", Motd)
+                .AddField("Id эскадрильи", SquadId)
+                .WithFooter($"Обновлено: {UpdatedDate.ToString(Constants.DateTimeFormat)}")
+                .WithColor(0, 49, 83)
+                .Build()
+            : new EmbedBuilder()
+                .WithTitle($"{SquadronName.ToUpper()} squadron info")
+                .AddField(nameof(Tag), $"[{Tag}]({string.Format(Constants.ExtendedLink, Tag)})")
+                .AddField(nameof(Members), Members)
+                .AddField(nameof(Owner), Owner)
+                .AddField(nameof(Platform), Platform)
+                .AddField("Creation Date", CreationDate.ToString(Constants.DateTimeFormat))
+                .AddField(nameof(Power), Power)
+                .AddField("Super Power", SuperPower)
+                .AddField(nameof(Faction), Faction)
+                .AddField("User Tags", UserTags)
+                .AddField(nameof(Motd), Motd)
+                .AddField("Squad Id", SquadId)
+                .WithFooter($"Updated: {UpdatedDate.ToString(Constants.DateTimeFormat)}")
+                .WithColor(0, 49, 83)
+                .Build();
     }
 }
