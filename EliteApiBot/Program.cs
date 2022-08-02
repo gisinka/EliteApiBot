@@ -1,20 +1,33 @@
-using System.Reflection;
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
-using Elite_API_Discord.Infrastructure.Discord;
+using EliteApiBot.Infrastructure.Discord;
+using EliteApiBot.Infrastructure.Squad;
+using EliteApiBot.Utils;
 
-namespace Elite_API_Discord;
+namespace EliteApiBot;
 
-public class Program
+public static class Program
 {
     public static async Task Main()
     {
-        var client = new DiscordSocketClient(new DiscordSocketConfig { LogLevel = LogSeverity.Info });
-        var commandsService = new CommandService(new CommandServiceConfig { LogLevel = LogSeverity.Info, CaseSensitiveCommands = false });
-        var serviceProvider = Initialize.BuildServiceProvider(client, commandsService);
-        await commandsService.AddModulesAsync(Assembly.GetEntryAssembly(), serviceProvider);
-        await new CommandHandler(commandsService, client)
+        var serviceProvider = ConfigureServiceProvider();
+
+        await serviceProvider.GetRequiredService<CommandHandler>()
             .RunAsync("OTIwMjUyMTYxMTE4NTY4NDY5.YbhpnA.nCd16zUnCeS5hY7odT_cTS8hkzk");
+    }
+
+    private static ServiceProvider ConfigureServiceProvider()
+    {
+        return new ServiceCollection()
+            .AddSingleton(new HttpClient().AddHeaders())
+            .AddSingleton<SquadRequester>()
+            .AddSingleton<SquadBuilder>()
+            .AddSingleton(new DiscordSocketConfig { LogLevel = LogSeverity.Info })
+            .AddSingleton<DiscordSocketClient>()
+            .AddSingleton(new CommandServiceConfig { LogLevel = LogSeverity.Info, CaseSensitiveCommands = false })
+            .AddSingleton<CommandService>()
+            .AddSingleton<CommandHandler>()
+            .BuildServiceProvider();
     }
 }

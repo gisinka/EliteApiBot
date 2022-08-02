@@ -1,24 +1,27 @@
-﻿using Discord;
+﻿using System.Reflection;
+using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using IResult = Discord.Commands.IResult;
 
-namespace Elite_API_Discord.Infrastructure.Discord;
+namespace EliteApiBot.Infrastructure.Discord;
 
-internal class CommandHandler
+public class CommandHandler
 {
     private readonly DiscordSocketClient client;
     private readonly CommandService commandsService;
+    private readonly IServiceProvider services;
 
-    public CommandHandler(CommandService commandsService, DiscordSocketClient client)
+    public CommandHandler(CommandService commandsService, DiscordSocketClient client, IServiceProvider services)
     {
         this.commandsService = commandsService;
         this.client = client;
+        this.services = services;
     }
 
     public async Task RunAsync(string token)
     {
-        InitializeAsync();
+        await InitializeAsync();
         await client.LoginAsync(TokenType.Bot, token);
         await client.StartAsync();
         await Task.Delay(Timeout.Infinite);
@@ -30,8 +33,9 @@ internal class CommandHandler
         return Task.CompletedTask;
     }
 
-    private void InitializeAsync()
+    private async Task InitializeAsync()
     {
+        await commandsService.AddModulesAsync(Assembly.GetEntryAssembly(), services);
         client.Log += Log;
         commandsService.Log += Log;
         client.MessageReceived += HandleCommand;
@@ -39,7 +43,7 @@ internal class CommandHandler
     }
 
     private Task HandleCommand(SocketMessage messageParam)
-    {
+     {
         Task.Run(async () =>
         {
             if (messageParam is not SocketUserMessage message) return;
@@ -53,7 +57,7 @@ internal class CommandHandler
 
             var context = new SocketCommandContext(client, message);
 
-            await commandsService.ExecuteAsync(context, argPos, null);
+            await commandsService.ExecuteAsync(context, argPos, services);
         });
 
         return Task.CompletedTask;

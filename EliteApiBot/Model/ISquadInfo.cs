@@ -1,6 +1,6 @@
 ﻿using Discord;
 
-namespace Elite_API_Discord.Model
+namespace EliteApiBot.Model
 {
     public interface ISquadInfo
     {

@@ -1,7 +1,7 @@
 ﻿using Discord;
-using Elite_API_Discord.Utils;
+using EliteApiBot.Utils;
 
-namespace Elite_API_Discord.Model;
+namespace EliteApiBot.Model;
 
 public class Player
 {

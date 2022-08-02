@@ -1,6 +1,6 @@
 ﻿using Discord;
 
-namespace Elite_API_Discord.Utils
+namespace EliteApiBot.Utils
 {
     public static class EmbedFactory
     {

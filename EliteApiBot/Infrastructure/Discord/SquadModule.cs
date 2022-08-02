@@ -1,16 +1,24 @@
 ﻿using Discord.Commands;
-using Elite_API_Discord.Infrastructure.Player;
-using Elite_API_Discord.Infrastructure.Squad;
+using EliteApiBot.Infrastructure.Player;
+using EliteApiBot.Infrastructure.Squad;
 
-namespace Elite_API_Discord.Infrastructure.Discord;
+namespace EliteApiBot.Infrastructure.Discord;
 
 public class SquadModule : ModuleBase<SocketCommandContext>
 {
+
+    private readonly SquadBuilder squadBuilder;
+
+    public SquadModule(SquadBuilder squadBuilder)
+    {
+        this.squadBuilder = squadBuilder;
+    }
+
     [Command("squadfull")]
     [Summary("Printing full squad info by tag")]
     public async Task GetFullSquadStringAsync([Summary("Squad tag")] string tag)
     {
-        var contents = await SquadBuilder.GetSquadsEmbeds(tag, true);
+        var contents = await squadBuilder.GetSquadsEmbeds(tag, true);
 
         await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
     }
@@ -19,7 +27,7 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     [Summary("Printing squad info by tag")]
     public async Task GetSquadStringsAsync([Summary("Squad tag")] string tag)
     {
-        var contents = await SquadBuilder.GetSquadsEmbeds(tag);
+        var contents = await squadBuilder.GetSquadsEmbeds(tag);
 
         await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
     }

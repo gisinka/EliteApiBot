@@ -2,7 +2,7 @@
 using CsvHelper.Configuration;
 using Newtonsoft.Json;
 
-namespace Elite_API_Discord.Utils;
+namespace EliteApiBot.Utils;
 
 public static class Constants
 {

@@ -1,8 +1,8 @@
 ﻿using CsvHelper;
 using Discord;
-using Elite_API_Discord.Utils;
+using EliteApiBot.Utils;
 
-namespace Elite_API_Discord.Infrastructure.Player;
+namespace EliteApiBot.Infrastructure.Player;
 
 public class PlayerImporter
 {
