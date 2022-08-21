@@ -6,26 +6,38 @@ namespace EliteApiBot.Model;
 
 public class SquadInfo : ISquadInfo
 {
-    [JsonProperty("Squadron name")] public string SquadronName { get; set; } = "N/D";
+    [JsonProperty("Squadron name")]
+    public string SquadronName { get; set; } = "N/D";
 
-    [JsonProperty("Tag")] public string Tag { get; set; } = "N/D";
+    [JsonProperty("Tag")]
+    public string Tag { get; set; } = "N/D";
 
-    [JsonProperty("Members")] public short Members { get; set; }
+    [JsonProperty("Members")]
+    public short Members { get; set; }
 
-    [JsonProperty("Owner")] public string Owner { get; set; } = "N/D";
+    [JsonProperty("Owner")]
+    public string Owner { get; set; } = "N/D";
 
-    [JsonProperty("Platform")] public string Platform { get; set; } = "N/D";
+    [JsonProperty("Platform")]
+    public string Platform { get; set; } = "N/D";
 
-    [JsonProperty("Created UTC")] public DateTime CreationDate { get; set; } = DateTime.Now;
+    [JsonProperty("Created UTC")]
+    public DateTime CreationDate { get; set; } = DateTime.Now;
 
-    [JsonProperty("Power name")] public string Power { get; set; } = "N/D";
+    [JsonProperty("Power name")]
+    public string Power { get; set; } = "N/D";
 
-    [JsonProperty("Super power name")] public string SuperPower { get; set; } = "N/D";
+    [JsonProperty("Super power name")]
+    public string SuperPower { get; set; } = "N/D";
 
-    [JsonProperty("Faction name")] public string Faction { get; set; } = "N/D";
+    [JsonProperty("Faction name")]
+    public string Faction { get; set; } = "N/D";
 
-    [JsonProperty("Updated UTC")] public DateTime UpdatedDate { get; set; } = DateTime.Now;
-    [JsonProperty("motd")] public string Motd { get; set; } = "N/D";
+    [JsonProperty("Updated UTC")]
+    public DateTime UpdatedDate { get; set; } = DateTime.Now;
+
+    [JsonProperty("motd")]
+    public string Motd { get; set; } = "N/D";
 
     public Embed BuildEmbed(bool isRussian = true)
     {
