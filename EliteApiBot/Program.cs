@@ -2,6 +2,7 @@ using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
 using EliteApiBot.Infrastructure.Discord;
+using EliteApiBot.Infrastructure.Player;
 using EliteApiBot.Infrastructure.Squad;
 using EliteApiBot.Utils;
 
@@ -23,6 +24,7 @@ public static class Program
             .AddSingleton(new HttpClient().AddHeaders())
             .AddSingleton<SquadRequester>()
             .AddSingleton<SquadBuilder>()
+            .AddSingleton<PlayerImporter>()
             .AddSingleton(new DiscordSocketConfig { LogLevel = LogSeverity.Info })
             .AddSingleton<DiscordSocketClient>()
             .AddSingleton(new CommandServiceConfig { LogLevel = LogSeverity.Info, CaseSensitiveCommands = false })

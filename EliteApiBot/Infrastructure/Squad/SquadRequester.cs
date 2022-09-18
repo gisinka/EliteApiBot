@@ -1,8 +1,9 @@
-﻿namespace EliteApiBot.Infrastructure.Squad;
+﻿using EliteApiBot.Utils;
+
+namespace EliteApiBot.Infrastructure.Squad;
 
 public class SquadRequester
 {
-
     private readonly HttpClient client;
 
     public SquadRequester(HttpClient client)
@@ -12,9 +13,11 @@ public class SquadRequester
 
     public async Task<string?> Request(string tag,  bool isFull = false)
     {
-        var url = isFull 
-            ? $"https://sapi.demb.uk/api/squads/now/by-tag/extended/{tag}?resolve_tags=true&pretty_keys=true"
-            : $"https://sapi.demb.uk/api/squads/now/by-tag/extended/{tag}?pretty_keys=true";
+        var urlFormat = isFull
+            ? Constants.JsonLinkWithTagsResolve
+            : Constants.JsonLinkWithoutTagsResolve;
+        var url = string.Format(urlFormat, tag);
+
         using var request = new HttpRequestMessage(HttpMethod.Get, url);
         using var httpResponse = await client.SendAsync(request);
 

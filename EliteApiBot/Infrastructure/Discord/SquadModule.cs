@@ -8,10 +8,12 @@ public class SquadModule : ModuleBase<SocketCommandContext>
 {
 
     private readonly SquadBuilder squadBuilder;
+    private readonly PlayerImporter playerImporter;
 
-    public SquadModule(SquadBuilder squadBuilder)
+    public SquadModule(SquadBuilder squadBuilder, PlayerImporter playerImporter)
     {
         this.squadBuilder = squadBuilder;
+        this.playerImporter = playerImporter;
     }
 
     [Command("squadfull")]
@@ -36,7 +38,7 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     [Summary("Printing carebear info by name")]
     public async Task GetPlayerStringAsync([Summary("Player name")] [Remainder] string name)
     {
-        var content = await PlayerImporter.GetNameStringsAsync(name);
+        var content = await playerImporter.GetNameStringsAsync(name);
 
         await ReplyAsync("", false, content);
     }

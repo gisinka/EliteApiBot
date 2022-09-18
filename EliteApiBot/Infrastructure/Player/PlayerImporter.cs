@@ -6,11 +6,15 @@ namespace EliteApiBot.Infrastructure.Player;
 
 public class PlayerImporter
 {
-    public static async Task<Embed> GetNameStringsAsync(string name)
-    {
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.Host = "gitea.demb.uk";
+    private readonly HttpClient client;
 
+    public PlayerImporter(HttpClient client)
+    {
+        this.client = client;
+    }
+
+    public async Task<Embed> GetNameStringsAsync(string name)
+    {
         var sr = new StreamReader(await client.GetStreamAsync(Constants.CsvLink));
         using var csv = new CsvReader(sr, Constants.CsvConfiguration);
         var playersIterator = csv
