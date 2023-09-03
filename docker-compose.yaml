@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  eliteapibot:
+    image: eliteapibot
+    build:
+      context: .
+      dockerfile: ./EliteApiBot/Dockerfile
+
+    restart: unless-stopped
