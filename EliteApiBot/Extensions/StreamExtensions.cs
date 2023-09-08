@@ -2,7 +2,7 @@
 
 namespace EliteApiBot.Extensions
 {
-    public static class StreamExtensions
+    internal static class StreamExtensions
     {
         public static async Task<byte[]> ReadFullyAsync(this Stream stream, int bufferSize = 4096)
         {

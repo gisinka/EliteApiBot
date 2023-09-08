@@ -3,7 +3,7 @@ using Vostok.Clusterclient.Core.Model;
 
 namespace EliteApiBot.Extensions
 {
-    public static class ClusterResultExtensions
+    internal static class ClusterResultExtensions
     {
         public static void EnsureSuccess(this ClusterResult clusterResult)
         {

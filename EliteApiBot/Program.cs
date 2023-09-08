@@ -22,7 +22,6 @@ public static class Program
     {
         return new ServiceCollection()
             .AddSingleton<IEliteApiClient, EliteApiClient>()
-            .AddSingleton<SquadBuilder>()
             .AddSingleton(new DiscordSocketConfig { LogLevel = LogSeverity.Info })
             .AddSingleton<DiscordSocketClient>()
             .AddSingleton(new CommandServiceConfig { LogLevel = LogSeverity.Info, CaseSensitiveCommands = false })

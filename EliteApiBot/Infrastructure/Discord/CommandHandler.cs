@@ -87,7 +87,7 @@ public class CommandHandler
                 return;
             }
 
-            logMessage = new LogMessage(LogSeverity.Error, "Command", $"Sorry, {context.User.Username}... something went wrong -> [{result}]!");
+            logMessage = new LogMessage(LogSeverity.Error, "Command", $"Sorry, {context.User.Username}. something went wrong -> [{result}]!");
             Console.WriteLine(logMessage.ToString());
         });
 

@@ -3,7 +3,7 @@ using Vostok.Logging.Abstractions;
 
 namespace EliteApiBot.Extensions
 {
-    public static class LogMessageExtensions
+    internal static class LogMessageExtensions
     {
         public static LogEvent Convert(this LogMessage logMessage)
         {

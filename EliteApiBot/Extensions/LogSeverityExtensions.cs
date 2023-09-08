@@ -3,7 +3,7 @@ using LogLevel = Vostok.Logging.Abstractions.LogLevel;
 
 namespace EliteApiBot.Extensions
 {
-    public static class LogSeverityExtensions
+    internal static class LogSeverityExtensions
     {
         public static LogLevel Convert(this LogSeverity logSeverity)
         {
