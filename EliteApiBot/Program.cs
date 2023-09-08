@@ -15,7 +15,7 @@ public static class Program
         var serviceProvider = ConfigureServiceProvider();
 
         await serviceProvider.GetRequiredService<CommandHandler>()
-            .RunAsync("OTIwMjUyMTYxMTE4NTY4NDY5.YbhpnA.nCd16zUnCeS5hY7odT_cTS8hkzk");
+            .RunAsync(Environment.GetEnvironmentVariable("DISCORD_TOKEN"));
     }
 
     private static ServiceProvider ConfigureServiceProvider()

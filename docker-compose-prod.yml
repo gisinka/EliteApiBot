@@ -1,0 +1,7 @@
+services:
+  eliteapibot:
+    image: gisinka/eliteapibot:latest
+    environment:
+    - DISCORD_TOKEN=${DISCORD_TOKEN}
+    container_name: eliteapibot_prod
+    restart: always
