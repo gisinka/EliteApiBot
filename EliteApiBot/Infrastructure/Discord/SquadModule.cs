@@ -1,6 +1,6 @@
 ﻿using Discord.Commands;
-using EliteApiBot.Infrastructure.Player;
 using EliteApiBot.Infrastructure.Squad;
+using EliteApiBot.Utils;
 
 namespace EliteApiBot.Infrastructure.Discord;
 
@@ -8,12 +8,12 @@ public class SquadModule : ModuleBase<SocketCommandContext>
 {
 
     private readonly SquadBuilder squadBuilder;
-    private readonly PlayerImporter playerImporter;
+    private readonly IEliteApiClient eliteApiClient;
 
-    public SquadModule(SquadBuilder squadBuilder, PlayerImporter playerImporter)
+    public SquadModule(SquadBuilder squadBuilder, IEliteApiClient eliteApiClient)
     {
         this.squadBuilder = squadBuilder;
-        this.playerImporter = playerImporter;
+        this.eliteApiClient = eliteApiClient;
     }
 
     [Command("squadfull")]
@@ -38,8 +38,8 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     [Summary("Printing carebear info by name")]
     public async Task GetPlayerStringAsync([Summary("Player name")] [Remainder] string name)
     {
-        var content = await playerImporter.GetNameStringsAsync(name);
+        var player = await eliteApiClient.GetPlayerAsync(name);
 
-        await ReplyAsync("", false, content);
+        await ReplyAsync("", false, player is null ? EmbedFactory.NotExistingNameEmbed : player.BuildEmbed());
     }
 }

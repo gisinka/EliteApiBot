@@ -1,17 +1,16 @@
 ﻿using Discord;
 using EliteApiBot.Model;
 using EliteApiBot.Utils;
-using Newtonsoft.Json;
 
 namespace EliteApiBot.Infrastructure.Squad;
 
 public class SquadBuilder
 {
-    private readonly SquadRequester squadRequester;
+    private readonly IEliteApiClient eliteApiClient;
 
-    public SquadBuilder(SquadRequester squadRequester)
+    public SquadBuilder(IEliteApiClient eliteApiClient)
     {
-        this.squadRequester = squadRequester;
+        this.eliteApiClient = eliteApiClient;
     }
 
     public async Task<IEnumerable<Embed>> GetSquadsEmbeds(string tag, bool isFull = false, bool isRussian = true)
@@ -19,13 +18,9 @@ public class SquadBuilder
         if (!IsValidTag(tag))
             return new List<Embed> { EmbedFactory.InvalidTagEmbed };
 
-        var squadJsons = await squadRequester.Request(tag.ToUpperInvariant(), isFull);
-        if (squadJsons == null)
-            return new List<Embed> { EmbedFactory.ApiFaultEmbed };
-
-        var squadInfos = await SerializeSquadInfos(squadJsons, isFull);
-
-        return BuildEmbeds(squadInfos, isRussian);
+        return isFull
+            ? BuildEmbeds(await eliteApiClient.GetFullSquadInfoAsync(tag))
+            : BuildEmbeds(await eliteApiClient.GetSquadInfoAsync(tag));
     }
 
     private static bool IsValidTag(string tag)
@@ -33,22 +28,13 @@ public class SquadBuilder
         return tag.Length == 4 && tag.All(char.IsLetterOrDigit);
     }
 
-    private static async Task<List<ISquadInfo>> SerializeSquadInfos(string? squadJsons, bool isFull = false)
+    private static IEnumerable<Embed> BuildEmbeds(IReadOnlyCollection<ISquadInfo>? squadInfos, bool isRussian = true)
     {
-        IEnumerable<ISquadInfo>? squadInfos = isFull
-            ? await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfoFull>>(squadJsons, Constants.JsonSerializerSettings))
-            : await Task.Run(() => JsonConvert.DeserializeObject<List<SquadInfo>>(squadJsons, Constants.JsonSerializerSettings));
+        if (squadInfos is null)
+            return new List<Embed> { EmbedFactory.ApiFaultEmbed };
 
-        return squadInfos is null
-            ? new List<ISquadInfo>()
-            : squadInfos.ToList();
-
-    }
-
-    private static IEnumerable<Embed> BuildEmbeds(List<ISquadInfo> squadInfos, bool isRussian = true)
-    {
         return squadInfos.Any()
-            ? squadInfos.Select(x => x.BuildEmbed(isRussian))
-            : new List<Embed> { EmbedFactory.NotExistingTagEmbed };
+            ? squadInfos.Select(x => x.ToEmbed(isRussian))
+            : Enumerable.Repeat(EmbedFactory.NotExistingTagEmbed, 1);
     }
 }

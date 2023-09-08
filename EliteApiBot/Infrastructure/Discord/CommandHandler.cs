@@ -2,6 +2,8 @@
 using Discord;
 using Discord.Commands;
 using Discord.WebSocket;
+using EliteApiBot.Extensions;
+using Vostok.Logging.Abstractions;
 using IResult = Discord.Commands.IResult;
 
 namespace EliteApiBot.Infrastructure.Discord;
@@ -11,25 +13,27 @@ public class CommandHandler
     private readonly DiscordSocketClient client;
     private readonly CommandService commandsService;
     private readonly IServiceProvider services;
+    private readonly ILog log;
 
-    public CommandHandler(CommandService commandsService, DiscordSocketClient client, IServiceProvider services)
+    public CommandHandler(CommandService commandsService, DiscordSocketClient client, IServiceProvider services, ILog log)
     {
         this.commandsService = commandsService;
         this.client = client;
         this.services = services;
+        this.log = log;
     }
 
-    public async Task RunAsync(string token)
+    public async Task RunAsync(string token, CancellationToken cancellationToken)
     {
         await InitializeAsync();
         await client.LoginAsync(TokenType.Bot, token);
         await client.StartAsync();
-        await Task.Delay(Timeout.Infinite);
+        await Task.Delay(Timeout.Infinite, CancellationToken.None);
     }
 
-    private static Task Log(LogMessage msg)
+    private Task Log(LogMessage logMessage)
     {
-        Console.WriteLine(msg.ToString());
+        log.Log(logMessage.Convert());
         return Task.CompletedTask;
     }
 

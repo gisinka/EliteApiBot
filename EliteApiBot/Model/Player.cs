@@ -5,9 +5,9 @@ namespace EliteApiBot.Model;
 
 public class Player
 {
-    public string CMDR { get; set; }
-    public string Squadron { get; set; }
-    public string SQID { get; set; }
+    public string? CMDR { get; set; }
+    public string? Squadron { get; set; }
+    public string? SQID { get; set; }
 
     public Embed BuildEmbed()
     {

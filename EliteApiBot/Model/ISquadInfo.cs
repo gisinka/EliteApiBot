@@ -4,6 +4,6 @@ namespace EliteApiBot.Model
 {
     public interface ISquadInfo
     {
-        Embed BuildEmbed(bool isRussian);
+        Embed ToEmbed(bool isRussian);
     }
 }

@@ -39,7 +39,7 @@ public class SquadInfo : ISquadInfo
     [JsonProperty("motd")]
     public string Motd { get; set; } = "N/D";
 
-    public Embed BuildEmbed(bool isRussian = true)
+    public Embed ToEmbed(bool isRussian = true)
     {
         return isRussian
             ? new EmbedBuilder()

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace EliteApiBot.Model;
 
-public class SquadInfoFull : ISquadInfo
+public class FullSquadInfo : ISquadInfo
 {
     [JsonProperty("Squadron name")]
     public string SquadronName { get; set; } = "N/D";
@@ -45,7 +45,7 @@ public class SquadInfoFull : ISquadInfo
     [JsonProperty("motd")]
     public string Motd { get; set; } = "N/D";
 
-    public Embed BuildEmbed(bool isRussian = true)
+    public Embed ToEmbed(bool isRussian = true)
     {
         return isRussian
             ? new EmbedBuilder()
