@@ -2,6 +2,8 @@ services:
   eliteapibot:
     image: gisinka/eliteapibot:latest
     environment:
+    - DOTNET_gcServer=1
+    - DOTNET_GCHeapCount=c
     - DISCORD_TOKEN=${DISCORD_TOKEN}
     container_name: eliteapibot_prod
     restart: always

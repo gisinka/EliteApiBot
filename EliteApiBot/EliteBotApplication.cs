@@ -10,7 +10,7 @@ namespace EliteApiBot
 {
     public class EliteBotApplication : IVostokApplication
     {
-        private CommandHandler commandHandler;
+        private CommandHandler? commandHandler;
 
         public Task InitializeAsync(IVostokHostingEnvironment environment)
         {
@@ -21,7 +21,7 @@ namespace EliteApiBot
 
         public async Task RunAsync(IVostokHostingEnvironment environment)
         {
-            await commandHandler.RunAsync(environment.ConfigurationProvider.Get<BotConfiguration>().DiscordToken, environment.ShutdownToken);
+            await commandHandler!.RunAsync(environment.ConfigurationProvider.Get<BotConfiguration>().DiscordToken, environment.ShutdownToken);
         }
 
         private static ServiceProvider ConfigureServiceProvider(IConfigurationProvider configurationProvider, ILog log)
