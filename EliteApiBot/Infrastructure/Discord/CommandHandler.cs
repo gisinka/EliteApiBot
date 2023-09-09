@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Discord;
 using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using EliteApiBot.Extensions;
 using Vostok.Logging.Abstractions;
@@ -12,12 +13,14 @@ public class CommandHandler
 {
     private readonly DiscordSocketClient client;
     private readonly CommandService commandsService;
+    private readonly InteractionService interactionService;
     private readonly IServiceProvider services;
     private readonly ILog log;
 
-    public CommandHandler(CommandService commandsService, DiscordSocketClient client, IServiceProvider services, ILog log)
+    public CommandHandler(CommandService commandsService, InteractionService interactionService, DiscordSocketClient client, IServiceProvider services, ILog log)
     {
         this.commandsService = commandsService;
+        this.interactionService = interactionService;
         this.client = client;
         this.services = services;
         this.log = log;
@@ -43,10 +46,21 @@ public class CommandHandler
     private async Task InitializeAsync()
     {
         await commandsService.AddModulesAsync(Assembly.GetEntryAssembly(), services);
+        await interactionService.AddModulesAsync(Assembly.GetEntryAssembly(), services);
         client.Log += Log;
+        client.Ready += async () =>
+        {
+            await interactionService.RegisterCommandsGloballyAsync();
+        };
         commandsService.Log += Log;
         client.MessageReceived += HandleCommand;
         commandsService.CommandExecuted += CommandServiceExecutedLog;
+        client.InteractionCreated += async socketInteraction =>
+        {
+            var scope = services.CreateScope();
+            var context = new SocketInteractionContext(client, socketInteraction);
+            await interactionService.ExecuteCommandAsync(context, scope.ServiceProvider);
+        };
     }
 
     private async Task HandleCommand(SocketMessage messageParam)
@@ -81,7 +95,6 @@ public class CommandHandler
         }
 
         log.Error($"Sorry, {context.User.Username}. something went wrong -> [{result}]!");
-
         return Task.CompletedTask;
     }
 }

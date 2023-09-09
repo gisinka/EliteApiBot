@@ -61,7 +61,7 @@ namespace EliteApiBot.Infrastructure.Squad
             return await UpdateCache(invariantName);
         }
 
-        public async Task<Player?> UpdateCache(string name)
+        private async Task<Player?> UpdateCache(string name)
         {
             var response = await GetAsync(new Uri(botConfiguration.CsvLink, UriKind.Absolute));
             response.EnsureSuccessStatusCode();

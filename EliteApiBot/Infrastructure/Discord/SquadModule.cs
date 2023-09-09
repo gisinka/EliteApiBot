@@ -1,14 +1,12 @@
-﻿using Discord;
-using Discord.Commands;
+﻿using Discord.Commands;
 using EliteApiBot.Infrastructure.Squad;
-using EliteApiBot.Model;
 using EliteApiBot.Utils;
+using SummaryAttribute = Discord.Commands.SummaryAttribute;
 
 namespace EliteApiBot.Infrastructure.Discord;
 
 public class SquadModule : ModuleBase<SocketCommandContext>
 {
-
     private readonly IEliteApiClient eliteApiClient;
 
     public SquadModule(IEliteApiClient eliteApiClient)
@@ -20,7 +18,13 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     [Summary("Printing full squad info by tag")]
     public async Task GetFullSquadStringAsync([Summary("Squad tag")] string tag)
     {
-        var contents = await GetSquadsEmbeds(tag, true);
+        if (!BotUtils.IsValidTag(tag))
+        {
+            await ReplyAsync(string.Empty, false, EmbedFactory.InvalidTagEmbed);
+            return;
+        }
+
+        var contents = BotUtils.BuildEmbeds(await eliteApiClient.GetFullSquadInfoAsync(tag));
 
         await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
     }
@@ -29,7 +33,13 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     [Summary("Printing squad info by tag")]
     public async Task GetSquadStringsAsync([Summary("Squad tag")] string tag)
     {
-        var contents = await GetSquadsEmbeds(tag);
+        if (!BotUtils.IsValidTag(tag))
+        {
+            await ReplyAsync(string.Empty, false, EmbedFactory.InvalidTagEmbed);
+            return;
+        }
+
+        var contents = BotUtils.BuildEmbeds(await eliteApiClient.GetSquadInfoAsync(tag));
 
         await Task.WhenAll(contents.Select(content => ReplyAsync("", false, content)));
     }
@@ -40,31 +50,6 @@ public class SquadModule : ModuleBase<SocketCommandContext>
     {
         var player = await eliteApiClient.GetPlayerAsync(name);
 
-        await ReplyAsync("", false, player is null ? EmbedFactory.NotExistingNameEmbed : player.BuildEmbed());
-    }
-
-    public async Task<IEnumerable<Embed>> GetSquadsEmbeds(string tag, bool isFull = false, bool isRussian = true)
-    {
-        if (!IsValidTag(tag))
-            return new List<Embed> { EmbedFactory.InvalidTagEmbed };
-
-        return isFull
-            ? BuildEmbeds(await eliteApiClient.GetFullSquadInfoAsync(tag))
-            : BuildEmbeds(await eliteApiClient.GetSquadInfoAsync(tag));
-    }
-
-    private static bool IsValidTag(string tag)
-    {
-        return tag.Length == 4 && tag.All(char.IsLetterOrDigit);
-    }
-
-    private static IEnumerable<Embed> BuildEmbeds(IReadOnlyCollection<ISquadInfo>? squadInfos, bool isRussian = true)
-    {
-        if (squadInfos is null)
-            return new List<Embed> { EmbedFactory.ApiFaultEmbed };
-
-        return squadInfos.Any()
-            ? squadInfos.Select(x => x.ToEmbed(isRussian))
-            : Enumerable.Repeat(EmbedFactory.NotExistingTagEmbed, 1);
+        await ReplyAsync(string.Empty, false, player is null ? EmbedFactory.NotExistingNameEmbed : player.BuildEmbed());
     }
 }

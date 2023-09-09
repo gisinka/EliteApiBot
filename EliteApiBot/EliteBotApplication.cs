@@ -1,4 +1,6 @@
-﻿using Discord.Commands;
+﻿using Discord;
+using Discord.Commands;
+using Discord.Interactions;
 using Discord.WebSocket;
 using EliteApiBot.Infrastructure.Discord;
 using EliteApiBot.Infrastructure.Squad;
@@ -30,10 +32,16 @@ namespace EliteApiBot
             return new ServiceCollection()
                 .AddSingleton(configurationProvider)
                 .AddSingleton<IEliteApiClient, EliteApiClient>()
-                .AddSingleton(new DiscordSocketConfig { LogLevel = botConfiguration.LogSeverity })
+                .AddSingleton(new DiscordSocketConfig
+                {
+                    LogLevel = botConfiguration.LogSeverity,
+                    GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
+
+                })
                 .AddSingleton<DiscordSocketClient>()
                 .AddSingleton(new CommandServiceConfig { LogLevel = botConfiguration.LogSeverity, CaseSensitiveCommands = false })
                 .AddSingleton<CommandService>()
+                .AddSingleton<InteractionService>()
                 .AddSingleton<CommandHandler>()
                 .AddSingleton(log)
                 .BuildServiceProvider();
