@@ -67,29 +67,21 @@ public class CommandHandler
         return Task.CompletedTask;
     }
 
-    private static Task CommandServiceExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
+    private Task CommandServiceExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
     {
-        Task.Run(() =>
+        if (!command.IsSpecified)
         {
-            LogMessage logMessage;
+            log.Error($"Command failed to execute for [{context.User.Username}] <-> [{result.ErrorReason}]!");
+            return Task.CompletedTask;
+        }
 
-            if (!command.IsSpecified)
-            {
-                logMessage = new LogMessage(LogSeverity.Error, "Command", $"Command failed to execute for [{context.User.Username}] <-> [{result.ErrorReason}]!");
-                Console.WriteLine(logMessage.ToString());
-                return;
-            }
+        if (result.IsSuccess)
+        {
+            log.Info($"Command [{command.Value.Name}] executed for [{context.User.Username}] on [{context.Guild.Name}]");
+            return Task.CompletedTask;
+        }
 
-            if (result.IsSuccess)
-            {
-                logMessage = new LogMessage(LogSeverity.Info, "Command", $"Command [{command.Value.Name}] executed for [{context.User.Username}] on [{context.Guild.Name}]");
-                Console.WriteLine(logMessage.ToString());
-                return;
-            }
-
-            logMessage = new LogMessage(LogSeverity.Error, "Command", $"Sorry, {context.User.Username}. something went wrong -> [{result}]!");
-            Console.WriteLine(logMessage.ToString());
-        });
+        log.Error($"Sorry, {context.User.Username}. something went wrong -> [{result}]!");
 
         return Task.CompletedTask;
     }
