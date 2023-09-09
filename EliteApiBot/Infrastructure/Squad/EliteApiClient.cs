@@ -11,6 +11,7 @@ using Vostok.Clusterclient.Core.Strategies;
 using Vostok.Clusterclient.Core.Topology;
 using Vostok.Clusterclient.Transport;
 using Vostok.Logging.Abstractions;
+using IConfigurationProvider = Vostok.Configuration.Abstractions.IConfigurationProvider;
 
 namespace EliteApiBot.Infrastructure.Squad
 {
@@ -18,14 +19,16 @@ namespace EliteApiBot.Infrastructure.Squad
     {
         private readonly IClusterClient clusterClient;
         private readonly MemoryCache playersCache;
+        private readonly BotConfiguration botConfiguration;
 
-        public EliteApiClient(ILog log)
+        public EliteApiClient(IConfigurationProvider configurationProvider, ILog log)
         {
+            botConfiguration = configurationProvider.Get<BotConfiguration>();
             clusterClient = new ClusterClient(log, GetSetup());
             playersCache = new MemoryCache(new MemoryCacheOptions
             {
                 ExpirationScanFrequency = TimeSpan.FromSeconds(10),
-                SizeLimit = 1024 * 1024
+                SizeLimit = botConfiguration.PlayersCacheSizeLimit
             });
         }
 
@@ -52,35 +55,44 @@ namespace EliteApiBot.Infrastructure.Squad
         public async Task<Player?> GetPlayerAsync(string name)
         {
             var invariantName = name.ToLowerInvariant();
-            return await playersCache.GetOrCreateAsync(invariantName, async entry =>
-            {
-                var player = await GetPlayerAsyncInternal(name);
-                entry.SlidingExpiration = TimeSpan.FromMinutes(1);
-                entry.SetSize(sizeof(char) * (invariantName.Length + player.CMDR.Length + player.SQID.Length + player.Squadron.Length) + 8);
-                return player;
-            });
+            if (playersCache.TryGetValue(invariantName, out var player))
+                return (Player) player;
+
+            return await UpdateCache(invariantName);
         }
 
-        public async Task<Player?> GetPlayerAsyncInternal(string name)
+        public async Task<Player?> UpdateCache(string name)
         {
             var response = await GetAsync(new Uri(Constants.CsvLink, UriKind.Absolute));
             response.EnsureSuccessStatusCode();
 
+            var result = (Player) null;
             var sr = new StreamReader(response.GetStream());
             using var csv = new CsvReader(sr, Constants.CsvConfiguration);
             var playersIterator = csv
                 .EnumerateRecordsAsync(new Player())
                 .GetAsyncEnumerator();
+
             while (await playersIterator.MoveNextAsync())
             {
                 if (playersIterator.Current is null)
                     continue;
+                var currentPlayer = playersIterator.Current;
+                playersCache.Set(currentPlayer.CMDR.ToLowerInvariant(), currentPlayer, currentPlayer.CreatEntryOptions(botConfiguration.PlayersCacheExpirationTimeout));
 
                 if (string.Equals(playersIterator.Current.CMDR, name, StringComparison.InvariantCultureIgnoreCase))
-                    return playersIterator.Current;
+                    result = playersIterator.Current;
             }
 
-            return null;
+            if (result is not null) 
+                return result;
+
+            var entryOptions = new MemoryCacheEntryOptions()
+                .SetSlidingExpiration(botConfiguration.PlayersCacheExpirationTimeout)
+                .SetSize(0);
+            playersCache.Set(name, result, entryOptions);
+
+            return result;
         }
 
 

@@ -17,6 +17,7 @@ public static class Program
                 .SetInstance("single")
                 .SetProject("Isin")
                 .SetSubproject("Elite"));
+            builder.DisableClusterConfig();
             builder.SetupLog(setup => setup.SetupConsoleLog(consoleLogSetup => consoleLogSetup.Enable().UseAsynchronous()));
             builder.SetupConfiguration(setup =>
             {
