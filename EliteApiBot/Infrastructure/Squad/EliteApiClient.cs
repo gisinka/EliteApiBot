@@ -127,7 +127,7 @@ namespace EliteApiBot.Infrastructure.Squad
             {
                 CMDR = player.CMDR,
                 SQID = player.SQID,
-                Squadron = player.SQID,
+                Squadron = player.Squadron,
                 UpdatedTime = player.UpdatedTime
             };
         }
