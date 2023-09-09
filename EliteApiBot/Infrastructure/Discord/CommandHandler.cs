@@ -65,22 +65,22 @@ public class CommandHandler
          await commandsService.ExecuteAsync(context, argPos, services);
     }
 
-    private async Task CommandServiceExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
+    private Task CommandServiceExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
     {
         if (!command.IsSpecified)
         {
             log.Error($"Command failed to execute for [{context.User.Username}] <-> [{result.ErrorReason}]!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (result.IsSuccess)
         {
             log.Info($"Command [{command.Value.Name}] executed for [{context.User.Username}] on [{context.Guild.Name}]");
-            return;
+            return Task.CompletedTask;
         }
 
         log.Error($"Sorry, {context.User.Username}. something went wrong -> [{result}]!");
 
-        return;
+        return Task.CompletedTask;
     }
 }
