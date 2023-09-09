@@ -12,10 +12,11 @@ namespace EliteApiBot
     {
         private CommandHandler commandHandler;
 
-        public async Task InitializeAsync(IVostokHostingEnvironment environment)
+        public Task InitializeAsync(IVostokHostingEnvironment environment)
         {
             var serviceProvider = ConfigureServiceProvider(environment.ConfigurationProvider, environment.Log);
             commandHandler = serviceProvider.GetRequiredService<CommandHandler>();
+            return Task.CompletedTask;
         }
 
         public async Task RunAsync(IVostokHostingEnvironment environment)

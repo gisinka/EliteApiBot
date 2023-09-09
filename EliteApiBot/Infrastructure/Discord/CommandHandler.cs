@@ -51,7 +51,8 @@ public class CommandHandler
 
     private async Task HandleCommand(SocketMessage messageParam)
      {
-         if (messageParam is not SocketUserMessage message) return;
+         if (messageParam is not SocketUserMessage message) 
+             return;
 
          var argPos = 0;
 
