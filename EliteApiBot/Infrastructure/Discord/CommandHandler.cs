@@ -28,7 +28,10 @@ public class CommandHandler
         await InitializeAsync();
         await client.LoginAsync(TokenType.Bot, token);
         await client.StartAsync();
-        await Task.Delay(Timeout.Infinite, CancellationToken.None);
+        await Task.Delay(Timeout.Infinite, cancellationToken)
+            .ContinueWith(_ => client.StopAsync())
+            .ContinueWith(_ => client.LogoutAsync())
+            .ContinueWith(_ => client.DisposeAsync());
     }
 
     private Task Log(LogMessage logMessage)
@@ -46,43 +49,38 @@ public class CommandHandler
         commandsService.CommandExecuted += CommandServiceExecutedLog;
     }
 
-    private Task HandleCommand(SocketMessage messageParam)
+    private async Task HandleCommand(SocketMessage messageParam)
      {
-        Task.Run(async () =>
-        {
-            if (messageParam is not SocketUserMessage message) return;
+         if (messageParam is not SocketUserMessage message) return;
 
-            var argPos = 0;
+         var argPos = 0;
 
-            if (!(message.HasCharPrefix('!', ref argPos) ||
-                  message.HasMentionPrefix(client.CurrentUser, ref argPos)) ||
-                message.Author.IsBot)
-                return;
+         if (!(message.HasCharPrefix('!', ref argPos) ||
+               message.HasMentionPrefix(client.CurrentUser, ref argPos)) ||
+             message.Author.IsBot)
+             return;
 
-            var context = new SocketCommandContext(client, message);
+         var context = new SocketCommandContext(client, message);
 
-            await commandsService.ExecuteAsync(context, argPos, services);
-        });
-
-        return Task.CompletedTask;
+         await commandsService.ExecuteAsync(context, argPos, services);
     }
 
-    private Task CommandServiceExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
+    private async Task CommandServiceExecutedLog(Optional<CommandInfo> command, ICommandContext context, IResult result)
     {
         if (!command.IsSpecified)
         {
             log.Error($"Command failed to execute for [{context.User.Username}] <-> [{result.ErrorReason}]!");
-            return Task.CompletedTask;
+            return;
         }
 
         if (result.IsSuccess)
         {
             log.Info($"Command [{command.Value.Name}] executed for [{context.User.Username}] on [{context.Guild.Name}]");
-            return Task.CompletedTask;
+            return;
         }
 
         log.Error($"Sorry, {context.User.Username}. something went wrong -> [{result}]!");
 
-        return Task.CompletedTask;
+        return;
     }
 }
