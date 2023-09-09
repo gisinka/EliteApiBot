@@ -1,10 +1,7 @@
 using Discord;
-using Discord.Commands;
-using Discord.WebSocket;
-using EliteApiBot.Infrastructure.Discord;
-using EliteApiBot.Infrastructure.Squad;
-using Vostok.Logging.Abstractions;
-using Vostok.Logging.Console;
+using Vostok.Configuration.Sources.Object;
+using Vostok.Hosting;
+using Vostok.Hosting.Setup;
 
 namespace EliteApiBot;
 
@@ -12,22 +9,26 @@ public static class Program
 {
     public static async Task Main()
     {
-        var serviceProvider = ConfigureServiceProvider();
+        var host = new VostokHost(new VostokHostSettings(new EliteBotApplication(), builder =>
+        {
+            builder.SetupApplicationIdentity(setup => setup
+                .SetApplication("EliteApiBot")
+                .SetEnvironment("default")
+                .SetInstance("single")
+                .SetProject("Isin")
+                .SetSubproject("Elite"));
+            builder.SetupLog(setup => setup.SetupConsoleLog(consoleLogSetup => consoleLogSetup.Enable().UseAsynchronous()));
+            builder.SetupConfiguration(setup =>
+            {
+                setup.SetupSourceFor<BotConfiguration>()
+                    .AddSource(new ObjectSource(new BotConfiguration 
+                    { 
+                        LogSeverity = LogSeverity.Info, 
+                        DiscordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN")!,
+                    }));
+            });
+        }));
 
-        await serviceProvider.GetRequiredService<CommandHandler>()
-            .RunAsync(Environment.GetEnvironmentVariable("DISCORD_TOKEN")!, CancellationToken.None);
-    }
-
-    private static ServiceProvider ConfigureServiceProvider()
-    {
-        return new ServiceCollection()
-            .AddSingleton<IEliteApiClient, EliteApiClient>()
-            .AddSingleton(new DiscordSocketConfig { LogLevel = LogSeverity.Info })
-            .AddSingleton<DiscordSocketClient>()
-            .AddSingleton(new CommandServiceConfig { LogLevel = LogSeverity.Info, CaseSensitiveCommands = false })
-            .AddSingleton<CommandService>()
-            .AddSingleton<CommandHandler>()
-            .AddSingleton<ILog>(new ConsoleLog())
-            .BuildServiceProvider();
+        await host.RunAsync();
     }
 }

@@ -1,17 +1,16 @@
-﻿using EliteApiBot.Model;
-using System;
-using System.Text;
+﻿using System.Text;
+using CsvHelper;
 using EliteApiBot.Extensions;
+using EliteApiBot.Model;
 using EliteApiBot.Utils;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using Vostok.Clusterclient.Core;
 using Vostok.Clusterclient.Core.Model;
-using Vostok.Logging.Abstractions;
 using Vostok.Clusterclient.Core.Strategies;
 using Vostok.Clusterclient.Core.Topology;
 using Vostok.Clusterclient.Transport;
-using Newtonsoft.Json;
-using CsvHelper;
-using Microsoft.Extensions.Caching.Memory;
+using Vostok.Logging.Abstractions;
 
 namespace EliteApiBot.Infrastructure.Squad
 {
@@ -50,19 +49,19 @@ namespace EliteApiBot.Infrastructure.Squad
                    ?? Array.Empty<FullSquadInfo>();
         }
 
-        public async Task<Model.Player?> GetPlayerAsync(string name)
+        public async Task<Player?> GetPlayerAsync(string name)
         {
             var invariantName = name.ToLowerInvariant();
             return await playersCache.GetOrCreateAsync(invariantName, async entry =>
             {
-                entry.SlidingExpiration = TimeSpan.FromMinutes(1);
-                entry.SetSize(sizeof(char) * invariantName.Length);
                 var player = await GetPlayerAsyncInternal(name);
+                entry.SlidingExpiration = TimeSpan.FromMinutes(1);
+                entry.SetSize(sizeof(char) * (invariantName.Length + player.CMDR.Length + player.SQID.Length + player.Squadron.Length) + 8);
                 return player;
             });
         }
 
-        public async Task<Model.Player?> GetPlayerAsyncInternal(string name)
+        public async Task<Player?> GetPlayerAsyncInternal(string name)
         {
             var response = await GetAsync(new Uri(Constants.CsvLink, UriKind.Absolute));
             response.EnsureSuccessStatusCode();
@@ -70,7 +69,7 @@ namespace EliteApiBot.Infrastructure.Squad
             var sr = new StreamReader(response.GetStream());
             using var csv = new CsvReader(sr, Constants.CsvConfiguration);
             var playersIterator = csv
-                .EnumerateRecordsAsync(new Model.Player())
+                .EnumerateRecordsAsync(new Player())
                 .GetAsyncEnumerator();
             while (await playersIterator.MoveNextAsync())
             {

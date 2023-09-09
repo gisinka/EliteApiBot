@@ -8,6 +8,7 @@ public class Player
     public string? CMDR { get; set; }
     public string? Squadron { get; set; }
     public string? SQID { get; set; }
+    public DateTime UpdatedTime { get; set; } = DateTime.Now;
 
     public Embed BuildEmbed()
     {
@@ -16,7 +17,7 @@ public class Player
             .AddField("Игровой ник", CMDR)
             .AddField("Эскадра", Squadron)
             .AddField("Тег эскадры", SQID)
-            .WithFooter($"Обновлено: {DateTime.Now.ToString(Constants.DateTimeFormat)}")
+            .WithFooter($"Обновлено: {UpdatedTime.ToString(Constants.DateTimeFormat)}")
             .WithColor(127, 199, 255)
             .Build();
     }

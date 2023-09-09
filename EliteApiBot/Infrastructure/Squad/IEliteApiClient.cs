@@ -6,6 +6,6 @@ namespace EliteApiBot.Infrastructure.Squad
     {
         public Task<IReadOnlyCollection<SquadInfo>> GetSquadInfoAsync(string tag);
         public Task<IReadOnlyCollection<FullSquadInfo>> GetFullSquadInfoAsync(string tag);
-        public Task<Model.Player?> GetPlayerAsync(string name);
+        public Task<Player?> GetPlayerAsync(string name);
     }
 }
