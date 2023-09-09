@@ -24,7 +24,7 @@ namespace EliteApiBot.Infrastructure.Squad
         public EliteApiClient(IConfigurationProvider configurationProvider, ILog log)
         {
             botConfiguration = configurationProvider.Get<BotConfiguration>();
-            clusterClient = new ClusterClient(log, GetSetup());
+            clusterClient = new ClusterClient(log, GetSetup(botConfiguration));
             playersCache = new MemoryCache(new MemoryCacheOptions
             {
                 ExpirationScanFrequency = TimeSpan.FromSeconds(10),
@@ -34,7 +34,7 @@ namespace EliteApiBot.Infrastructure.Squad
 
         public async Task<IReadOnlyCollection<SquadInfo>> GetSquadInfoAsync(string tag)
         {
-            var uri = string.Format(Constants.JsonLinkWithoutTagsResolve, tag);
+            var uri = string.Format(botConfiguration.JsonLinkWithoutTagsResolve, tag);
             var response = await GetAsync(new Uri(uri, UriKind.Relative));
             response.EnsureSuccessStatusCode();
             var responseBody = Encoding.UTF8.GetString(await response.GetBytesAsync());
@@ -44,7 +44,7 @@ namespace EliteApiBot.Infrastructure.Squad
 
         public async Task<IReadOnlyCollection<FullSquadInfo>> GetFullSquadInfoAsync(string tag)
         {
-            var uri = string.Format(Constants.JsonLinkWithTagsResolve, tag);
+            var uri = string.Format(botConfiguration.JsonLinkWithTagsResolve, tag);
             var response = await GetAsync(new Uri(uri, UriKind.Relative));
             response.EnsureSuccessStatusCode();
             var responseBody = Encoding.UTF8.GetString(await response.GetBytesAsync());
@@ -63,7 +63,7 @@ namespace EliteApiBot.Infrastructure.Squad
 
         public async Task<Player?> UpdateCache(string name)
         {
-            var response = await GetAsync(new Uri(Constants.CsvLink, UriKind.Absolute));
+            var response = await GetAsync(new Uri(botConfiguration.CsvLink, UriKind.Absolute));
             response.EnsureSuccessStatusCode();
 
             var result = (Player) null;
@@ -77,11 +77,11 @@ namespace EliteApiBot.Infrastructure.Squad
             {
                 if (playersIterator.Current is null)
                     continue;
-                var currentPlayer = playersIterator.Current;
+                var currentPlayer = CopyPlayer(playersIterator.Current);
                 playersCache.Set(currentPlayer.CMDR.ToLowerInvariant(), currentPlayer, currentPlayer.CreatEntryOptions(botConfiguration.PlayersCacheExpirationTimeout));
 
-                if (string.Equals(playersIterator.Current.CMDR, name, StringComparison.InvariantCultureIgnoreCase))
-                    result = playersIterator.Current;
+                if (string.Equals(currentPlayer.CMDR, name, StringComparison.InvariantCultureIgnoreCase))
+                    result = currentPlayer;
             }
 
             if (result is not null) 
@@ -107,7 +107,7 @@ namespace EliteApiBot.Infrastructure.Squad
         }
 
 
-        private static ClusterClientSetup GetSetup()
+        private static ClusterClientSetup GetSetup(BotConfiguration botConfiguration)
         {
             return config =>
             {
@@ -115,9 +115,20 @@ namespace EliteApiBot.Infrastructure.Squad
                 {
                     UseResponseStreaming = length => length > 1024 * 1024
                 });
-                config.ClusterProvider = new FixedClusterProvider(Constants.ApiUrl);
+                config.ClusterProvider = new FixedClusterProvider(botConfiguration.ApiUrl);
                 config.DefaultRequestStrategy = new SingleReplicaRequestStrategy();
                 config.DefaultTimeout = TimeSpan.FromSeconds(30);
+            };
+        }
+
+        private static Player CopyPlayer(Player player)
+        {
+            return new Player
+            {
+                CMDR = player.CMDR,
+                SQID = player.SQID,
+                Squadron = player.SQID,
+                UpdatedTime = player.UpdatedTime
             };
         }
     }
