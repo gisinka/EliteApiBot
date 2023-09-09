@@ -22,6 +22,8 @@ public static class Constants
     public static readonly CsvConfiguration CsvConfiguration = new(CultureInfo.InvariantCulture)
     {
         Delimiter = ",",
-        HasHeaderRecord = true
+        HasHeaderRecord = true,
+        HeaderValidated = null,
+        MissingFieldFound = null
     };
 }
