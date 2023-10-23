@@ -12,11 +12,11 @@ public static class Program
         var host = new VostokHost(new VostokHostSettings(new EliteBotApplication(), builder =>
         {
             builder.SetupApplicationIdentity(setup => setup
-                .SetApplication("EliteApiBot")
                 .SetEnvironment("default")
-                .SetInstance("single")
-                .SetProject("Isin")
-                .SetSubproject("Elite"));
+                .SetProject("CECW")
+                .SetSubproject("Elite")
+                .SetApplication("EliteApiBot")
+                .SetInstance("single"));
             builder.DisableClusterConfig();
             builder.SetupLog(setup => setup.SetupConsoleLog(consoleLogSetup => consoleLogSetup.Enable().UseAsynchronous()));
             builder.SetupConfiguration(setup =>
@@ -25,7 +25,7 @@ public static class Program
                     .AddSource(new ObjectSource(new BotConfiguration 
                     { 
                         LogSeverity = LogSeverity.Info, 
-                        DiscordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN")!,
+                        DiscordToken = Environment.GetEnvironmentVariable("DISCORD_TOKEN")!
                     }));
             });
         }));

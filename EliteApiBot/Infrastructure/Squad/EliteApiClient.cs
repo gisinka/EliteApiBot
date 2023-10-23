@@ -35,7 +35,7 @@ namespace EliteApiBot.Infrastructure.Squad
         public async Task<IReadOnlyCollection<SquadInfo>> GetSquadInfoAsync(string tag)
         {
             var uri = string.Format(botConfiguration.JsonLinkWithoutTagsResolve, tag);
-            var response = await GetAsync(new Uri(uri, UriKind.Relative));
+            using var response = await GetAsync(new Uri(uri, UriKind.Relative));
             response.EnsureSuccessStatusCode();
             var responseBody = Encoding.UTF8.GetString(await response.GetBytesAsync());
             return JsonConvert.DeserializeObject<List<SquadInfo>>(responseBody, Constants.JsonSerializerSettings) as IReadOnlyCollection<SquadInfo>
@@ -45,7 +45,7 @@ namespace EliteApiBot.Infrastructure.Squad
         public async Task<IReadOnlyCollection<FullSquadInfo>> GetFullSquadInfoAsync(string tag)
         {
             var uri = string.Format(botConfiguration.JsonLinkWithTagsResolve, tag);
-            var response = await GetAsync(new Uri(uri, UriKind.Relative));
+            using var response = await GetAsync(new Uri(uri, UriKind.Relative));
             response.EnsureSuccessStatusCode();
             var responseBody = Encoding.UTF8.GetString(await response.GetBytesAsync());
             return JsonConvert.DeserializeObject<List<FullSquadInfo>>(responseBody, Constants.JsonSerializerSettings) as IReadOnlyCollection<FullSquadInfo>
@@ -56,20 +56,20 @@ namespace EliteApiBot.Infrastructure.Squad
         {
             var invariantName = name.ToLowerInvariant();
             if (playersCache.TryGetValue(invariantName, out var player))
-                return (Player) player;
+                return (Player) player!;
 
             return await UpdateCache(invariantName);
         }
 
         private async Task<Player?> UpdateCache(string name)
         {
-            var response = await GetAsync(new Uri(botConfiguration.CsvLink, UriKind.Absolute));
+            using var response = await GetAsync(new Uri(botConfiguration.CsvLink, UriKind.Absolute));
             response.EnsureSuccessStatusCode();
 
-            var result = (Player) null;
-            var sr = new StreamReader(response.GetStream());
+            var result = (Player) null!;
+            using var sr = new StreamReader(response.GetStream());
             using var csv = new CsvReader(sr, Constants.CsvConfiguration);
-            var playersIterator = csv
+            await using var playersIterator = csv
                 .EnumerateRecordsAsync(new Player())
                 .GetAsyncEnumerator();
 

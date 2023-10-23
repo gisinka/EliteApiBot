@@ -12,18 +12,16 @@ namespace EliteApiBot
 {
     public class EliteBotApplication : IVostokApplication
     {
-        private CommandHandler? commandHandler;
+        public async Task RunAsync(IVostokHostingEnvironment environment)
+        {
+            var serviceProvider = ConfigureServiceProvider(environment.ConfigurationProvider, environment.Log);
+            var commandHandler = serviceProvider.GetRequiredService<CommandHandler>();
+            await commandHandler.RunAsync(environment.ConfigurationProvider.Get<BotConfiguration>().DiscordToken, environment.ShutdownToken);
+        }
 
         public Task InitializeAsync(IVostokHostingEnvironment environment)
         {
-            var serviceProvider = ConfigureServiceProvider(environment.ConfigurationProvider, environment.Log);
-            commandHandler = serviceProvider.GetRequiredService<CommandHandler>();
             return Task.CompletedTask;
-        }
-
-        public async Task RunAsync(IVostokHostingEnvironment environment)
-        {
-            await commandHandler!.RunAsync(environment.ConfigurationProvider.Get<BotConfiguration>().DiscordToken, environment.ShutdownToken);
         }
 
         private static ServiceProvider ConfigureServiceProvider(IConfigurationProvider configurationProvider, ILog log)
