@@ -1,11 +1,10 @@
 ﻿using EliteApiBot.Model;
 
-namespace EliteApiBot.Infrastructure.Squad
+namespace EliteApiBot.Infrastructure.Squad;
+
+public interface IEliteApiClient
 {
-    public interface IEliteApiClient
-    {
-        public Task<IReadOnlyCollection<SquadInfo>> GetSquadInfoAsync(string tag);
-        public Task<IReadOnlyCollection<FullSquadInfo>> GetFullSquadInfoAsync(string tag);
-        public Task<Player?> GetPlayerAsync(string name);
-    }
+    public Task<IReadOnlyCollection<SquadInfo>> GetSquadInfoAsync(string tag);
+    public Task<IReadOnlyCollection<FullSquadInfo>> GetFullSquadInfoAsync(string tag);
+    public Task<Player?> GetPlayerAsync(string name);
 }
